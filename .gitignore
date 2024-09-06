@@ -7,6 +7,7 @@ venv/
 *.pdf
 *.jpg
 *.zip
+*.csv
 *.pt
 *-ubyte
 *.pyc
@@ -18,6 +19,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+resources/log/
 build/
 develop-eggs/
 dist/
