@@ -7,7 +7,6 @@ venv/
 *.pdf
 *.jpg
 *.zip
-*.csv
 *.pt
 *-ubyte
 *.pyc
