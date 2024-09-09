@@ -9,7 +9,7 @@ def find_linear_names(model):
     Returns:
         list: A list containing the names of all identified linear layers with 4-bit quantization.
     """
-    cls = bnb.nn.Linear4bit  
+    cls = bnb.nn.Linear4bit
 
     # Set to store identified layer names
     lora_module_names = set()
@@ -18,10 +18,10 @@ def find_linear_names(model):
     for name, module in model.named_modules():
         # Check if the current module is an instance of the 4-bit linear layer class
         if isinstance(module, cls):
-            names = name.split('.')
+            names = name.split(".")
             lora_module_names.add(names[0] if len(names) == 1 else names[-1])
 
         # Special case: remove 'lm_head' if present
-        if 'lm_head' in lora_module_names: 
-            lora_module_names.remove('lm_head')
+        if "lm_head" in lora_module_names:
+            lora_module_names.remove("lm_head")
     return list(lora_module_names)

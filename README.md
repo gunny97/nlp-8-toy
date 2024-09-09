@@ -32,7 +32,7 @@ $ wandb login
 $ python train.py
 ```
 
-**Optional.** 원격 연결 끊어졌을 때도 돌아살 수 있도록 Tmux 사용을 권장합니다! 더 자세한 명령어는 구글링 해주세요!
+**Optional.** 원격 연결 끊어졌을 때도 돌아갈 수 있도록 Tmux 사용을 권장합니다! 더 자세한 명령어는 구글링 해주세요!
 ```sh
 # 새로운 세션 생성
 $ tmux new -s (session_name)
@@ -52,7 +52,6 @@ $ tmux kill-session -t (session_name)
 
 
 ## 2. Project Structure
-Project Structure
 ### 📝 알아두면 좋은 몇가지 관례
 * 함수는 `헬퍼 함수` 또는 `API 함수`로 분류할 수 있습니다. `헬퍼 함수`임을 나타내기 위해 `_` 를 함수의 이름 앞에 표기합니다. `_`는 주로 비공개 또는 내부용이라는 의미입니다. 본인의 전처리 코드는 `_`를 사용해서 넣어주시면 좋을 것 같아요!
 ```python
@@ -64,7 +63,7 @@ class TransformerModule(LightningModule):
     # API 함수입니다. 학습할 때 Trainer가 자동으로 해당 함수를 사용합니다.
     def forward(self): 
     
-    # 헬퍼 함수입니다. 학습 및 테스트 과정 중 제가 원하는 작업을 할 때 사용합니다.   
+    # 헬퍼 함수입니다. 학습 및 테스트 과정 중 본인이 원하는 작업을 할 때 사용합니다.   
     def _compute_metrics(self, pred_class, label, prefix) -> tuple:
       metrics = {
           f"{prefix}_Acc": multiclass_accuracy(
@@ -117,7 +116,7 @@ from model.fine_tune_cls import TransformerModule
 * `loader`: 모델 학습에 필요한 `datamodule`을 작성해주세요. 마찬가지로 `pytorch lighting`구조이고, 헬퍼 함수를 사용해서 전처리 코드 작성해주세요.
 * `utils` : Task를 수행하면서 필요한 여러 함수들을 넣어주세요.
 * `train.py`: 메인 실행파일로 생각하시면 됩니다. 위에서 정의한 모듈들을 불러와서 실행합니다. 현재는 cls task를 수행하도록 작성했습니다. 새로운 Task를 수행할 때는 `train_generation.py`과 같이 새로운 실행파일을 만들어서 사용해주세요. 추후 모든 `train_#.py`를 병합할 예정입니다.
-* `test.py`: 현재는 없지는 테스트를 위한 파일을 하나 만들어주세요!
+* `test.py`: 테스트를 위한 파일을 하나 만들어주세요!
 
 ## 3. Project Rule
 **Rule 1.** 모든 작업자는 새로운 Task를 수행할 때, 새로운 브랜치를 만들어 작업해주세요. 모든 작업이 끝난 후 `main` 브랜치에 `merge` 합니다.

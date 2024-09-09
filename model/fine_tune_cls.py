@@ -19,6 +19,7 @@ class TransformerModule(LightningModule):
     """
     Takes a pretrained model with classification head and uses the peft package to do Adapter + LoRA fine tuning.
     """
+
     def __init__(
         self,
         pretrained_model: str,
@@ -26,17 +27,16 @@ class TransformerModule(LightningModule):
         lr: float,
     ):
         super().__init__()
-        # # 양자화를 사용해서 학습 시 loss가 Nan이 나오는 경우가 있어요. 
+        # # 양자화를 사용해서 학습 시 loss가 Nan이 나오는 경우가 있어요.
         # # 그 이유는 저도 자세히는 잘 모르겠지만 성능 측면에서는 양자화를 사용하지 않는게 좋으니 빼서 사용했어요!
         # bnb_config = BitsAndBytesConfig(
         #     load_in_4bit=True,
         #     bnb_4bit_use_double_quant=True,
         #     bnb_4bit_quant_type="nf4",
         #     bnb_4bit_compute_dtype=torch.bfloat16
-        # ) 
+        # )
         self.num_classes = num_classes
         self.lr = lr
-        
         model = AutoModelForSequenceClassification.from_pretrained(
             pretrained_model_name_or_path=pretrained_model,
             num_labels=self.num_classes,
@@ -49,12 +49,12 @@ class TransformerModule(LightningModule):
             # target_modules=modules,
             lora_dropout=0.05,  # Dropout rate for the adapter
             bias="none",  # Bias configuration for the adapter
-            r=64, # 8
+            r=64,  # 8
             lora_alpha=32,
         )
         self.model = get_peft_model(model, peft_config)
         self.model.print_trainable_parameters()
-        
+
     def forward(
         self,
         input_ids: list[int],
@@ -74,27 +74,25 @@ class TransformerModule(LightningModule):
     def _compute_metrics(self, pred_class, label, prefix) -> tuple:
         metrics = {
             f"{prefix}_Acc": multiclass_accuracy(
-                preds=pred_class,
-                target=label,
-                num_classes=self.num_classes
+                preds=pred_class, target=label, num_classes=self.num_classes
             ),
             f"{prefix}_F1_Score": multiclass_f1_score(
                 preds=pred_class,
                 target=label,
                 num_classes=self.num_classes,
-                average='macro'
+                average="macro",
             ),
             f"{prefix}_Precision": multiclass_precision(
                 preds=pred_class,
                 target=label,
                 num_classes=self.num_classes,
-                average='macro'
+                average="macro",
             ),
             f"{prefix}_Recall": multiclass_recall(
                 preds=pred_class,
                 target=label,
                 num_classes=self.num_classes,
-                average='macro'
+                average="macro",
             ),
         }
 
@@ -107,7 +105,7 @@ class TransformerModule(LightningModule):
             label=batch["label"],
         )
         self.lr_schedulers().step()
-        
+
         # For predicting probabilities, do softmax along last dimension (by row).
         pred_class = torch.argmax(torch.softmax(outputs["logits"], dim=-1), dim=1)
         # Calculate Score
@@ -129,13 +127,13 @@ class TransformerModule(LightningModule):
         pred_class = torch.argmax(torch.softmax(outputs["logits"], dim=-1), dim=1)
         # Calculate Score
         metrics = self._compute_metrics(pred_class, batch["label"], "Val")
-        
+
         # wandb logging
         self.log("Val_Loss", outputs["loss"], logger=True, on_epoch=True, on_step=False)
         for k, v in metrics.items():
             self.log(f"{k}", v, logger=True, on_epoch=True, on_step=False)
         return outputs["loss"]
-        
+
     def test_step(self, batch, batch_idx) -> dict[str, Any]:
         outputs = self(
             input_ids=batch["input_ids"],
@@ -146,15 +144,17 @@ class TransformerModule(LightningModule):
         pred_class = torch.argmax(torch.softmax(outputs["logits"], dim=-1), dim=1)
         # Calculate Score
         metrics = self._compute_metrics(pred_class, batch["label"], "Test")
-        
+
         # wandb logging
         self.log("Test_Loss", outputs["loss"])
         for k, v in metrics.items():
             self.log(f"{k}", v)
         return outputs["loss"]
-    
+
     def configure_optimizers(self) -> Optimizer:
-        optimizer = AdamW(self.parameters(), lr=self.lr, weight_decay=0.0, betas=(0.9, 0.98))
+        optimizer = AdamW(
+            self.parameters(), lr=self.lr, weight_decay=0.0, betas=(0.9, 0.98)
+        )
         scheduler = WarmupDecayLR(optimizer, warmup_steps=10000, d_model=512)
-        
+
         return [optimizer], [scheduler]
