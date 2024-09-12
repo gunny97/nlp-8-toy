@@ -136,6 +136,6 @@ from model.fine_tune_cls import TransformerModule
 ### Text Classification with LLM
 추후 기록.
 ### Text Summarization with LLM
-추후 기록.
+추후 기록..
 ### Text Semantic Text Similarity
 추후 기록.
