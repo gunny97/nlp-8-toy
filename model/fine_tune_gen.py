@@ -114,7 +114,7 @@ class TransformerModuleForGen(LightningModule):
             truncation=True,
             return_tensors="pt",
         ).to(device)
-        preds = self.model.generate(**inputs_, max_new_tokens=64, use_cache=True)
+        preds = self.model.generate(**inputs_, max_new_tokens=128, use_cache=True)
         preds = [
             self.tokenizer.decode(pred)
             .split("<start_of_turn>model")[-1]

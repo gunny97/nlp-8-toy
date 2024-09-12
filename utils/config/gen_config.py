@@ -15,7 +15,7 @@ def add_options():
 
     # Training
     parser.add_argument("--num_workers", default=os.cpu_count(), type=int)
-    parser.add_argument("--lr", default=2e-4, type=float)
+    parser.add_argument("--lr", default=1e-3, type=float)
     parser.add_argument("--max_length", default=1024, type=int)
     parser.add_argument("--batch_size", default=2, type=int)
     parser.add_argument("--epochs", default=50, type=int)
