@@ -15,9 +15,22 @@ def from_processed(dir: str, target_name: str):
     df[target_name] = df[target_name].astype("category")
     df[target_name] = df[target_name].cat.codes
     dataset = Dataset.from_dict(
-        {"text": df["utterances_text"].tolist(), "labels": df["topic"].tolist()}
+        {"text": df["utterances_text"].tolist(), "labels": df[target_name].tolist()}
     )
     # print("데이터 확인 : ", dataset[0])
+    
+    # dataset_dict = {
+    #     "text" : df["utterances_text"].tolist(),
+    # }
+    # if "topic" in df.columns:
+    #     dataset_dict["topic"] = df["topic"].astype("category").cat.codes.tolist()
+    # if "keyword" in df.columns:
+    #     dataset_dict["keyword"] = df["keyword"].astype("category").cat.codes.tolist()
+    # if "speech_act" in df.columns:
+    #     dataset_dict["speech_act"] = df["speech_act"].astype("category").cat.codes.tolist()
+        
+    # dataset = Dataset.from_dict(dataset_dict)
+    
     return dataset
 
 
@@ -25,8 +38,10 @@ class ClsDataModule(pl.LightningDataModule):
     def __init__(
         self,
         train_data: str,
-        valid_data: str,
-        test_data: str,
+        val_data: str,
+        train_act_data: str,
+        val_act_data: str,
+        #test_data: str,
         target_name: str,
         pretrained_model: str,
         max_length: int,
@@ -35,8 +50,9 @@ class ClsDataModule(pl.LightningDataModule):
     ):
         super().__init__()
         self.train_data = train_data
-        self.valid_data = valid_data
-        self.test_data = test_data
+        self.val_data = val_data
+        self.train_act_data = train_act_data
+        self.val_act_data = val_act_data
         self.target_name = target_name
         self.pretrained_model = pretrained_model
         self.max_length = max_length
@@ -47,13 +63,19 @@ class ClsDataModule(pl.LightningDataModule):
 
     def setup(self, stage=None):
         if stage == "fit" or stage is None:
-            self.dsdict["train"] = from_processed(self.train_data, self.target_name)
-            self.dsdict["validation"] = from_processed(
-                self.valid_data, self.target_name
-            )
+            if self.target_name in ["topic", "keyword"]:
+                self.dsdict["train"] = from_processed(self.train_data, self.target_name)
+                self.dsdict["validation"] = from_processed(self.val_data, self.target_name)
+            elif self.target_name == "speech_act":
+                self.dsdict["train"] = from_processed(self.train_act_data, self.target_name)
+                self.dsdict["validation"] = from_processed(self.val_act_data, self.target_name)
+
 
         if stage == "test" or stage is None:
-            self.dsdict["test"] = from_processed(self.test_data, self.target_name)
+            if self.target_name in ["topic", "keyword"]:
+                self.dsdict["test"] = from_processed(self.val_data, self.target_name)
+            elif self.target_name == "speech_act":
+                self.dsdict["test"] = from_processed(self.val_act_data, self.target_name)
 
     def _preprocess(self, batch: dict) -> dict:
         tokens = self.tokenizer(
@@ -62,7 +84,8 @@ class ClsDataModule(pl.LightningDataModule):
             padding="max_length",
             truncation=True,
         )
-        tokens["label"] = [label for label in batch["labels"]]
+        #tokens["labels"] = torch.tensor(batch["labels"], dtype=torch.long)
+        tokens["labels"] = batch["labels"]
         return tokens
 
     def _shared_transform(self, split: str) -> torch.tensor:
@@ -77,7 +100,7 @@ class ClsDataModule(pl.LightningDataModule):
         )
         # print("데이터 확인 2: ", tokenized_ds[0])
         tokenized_ds.set_format(
-            type="torch", columns=["input_ids", "attention_mask", "label"]
+            type="torch", columns=["input_ids", "attention_mask", "labels"]
         )
         return tokenized_ds
 

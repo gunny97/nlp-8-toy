@@ -25,18 +25,27 @@ class TransformerModule(LightningModule):
         pretrained_model: str,
         num_classes: int,
         lr: float,
+        use_quantization: bool = False,
     ):
         super().__init__()
-        # 양자화를 사용해서 학습 시 loss가 Nan이 나오는 경우가 있어요.
-        # 그 이유는 저도 자세히는 잘 모르겠지만 성능 측면에서는 양자화를 사용하지 않는게 좋으니 빼서 사용했어요!
-        bnb_config = BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_use_double_quant=True,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_compute_dtype=torch.bfloat16
-        )
+        
         self.num_classes = num_classes
         self.lr = lr
+        self.use_quantization = use_quantization
+        
+        if self.use_quantization:
+        # 양자화를 사용해서 학습 시 loss가 Nan이 나오는 경우가 있어요.
+        # 그 이유는 저도 자세히는 잘 모르겠지만 성능 측면에서는 양자화를 사용하지 않는게 좋으니 빼서 사용했어요!
+            bnb_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.bfloat16
+            )
+        else:
+            bnb_config = None
+        
+        
         model = AutoModelForSequenceClassification.from_pretrained(
             pretrained_model_name_or_path=pretrained_model,
             num_labels=self.num_classes,
@@ -59,7 +68,7 @@ class TransformerModule(LightningModule):
         self,
         input_ids: list[int],
         attention_mask: list[int],
-        label: list[int],
+        labels: list[int],
     ):
         """Calc the loss by passing inputs to the model and comparing against ground
         truth labels. Here, all of the arguments of self.model comes from the
@@ -68,7 +77,7 @@ class TransformerModule(LightningModule):
         return self.model(
             input_ids=input_ids,
             attention_mask=attention_mask,
-            labels=label,
+            labels=labels,
         )
 
     def _compute_metrics(self, pred_class, label, prefix) -> tuple:
@@ -102,14 +111,14 @@ class TransformerModule(LightningModule):
         outputs = self(
             input_ids=batch["input_ids"],
             attention_mask=batch["attention_mask"],
-            label=batch["label"],
+            labels=batch["labels"],
         )
         self.lr_schedulers().step()
 
         # For predicting probabilities, do softmax along last dimension (by row).
         pred_class = torch.argmax(torch.softmax(outputs["logits"], dim=-1), dim=1)
         # Calculate Score
-        metrics = self._compute_metrics(pred_class, batch["label"], "Train")
+        metrics = self._compute_metrics(pred_class, batch["labels"], "Train")
 
         # wandb logging
         self.log("Train_Loss", outputs["loss"], logger=True)
@@ -121,12 +130,12 @@ class TransformerModule(LightningModule):
         outputs = self(
             input_ids=batch["input_ids"],
             attention_mask=batch["attention_mask"],
-            label=batch["label"],
+            labels=batch["labels"],
         )
         # For predicting probabilities, do softmax along last dimension (by row).
         pred_class = torch.argmax(torch.softmax(outputs["logits"], dim=-1), dim=1)
         # Calculate Score
-        metrics = self._compute_metrics(pred_class, batch["label"], "Val")
+        metrics = self._compute_metrics(pred_class, batch["labels"], "Val")
 
         # wandb logging
         self.log("Val_Loss", outputs["loss"], logger=True, on_epoch=True, on_step=False)
@@ -138,12 +147,12 @@ class TransformerModule(LightningModule):
         outputs = self(
             input_ids=batch["input_ids"],
             attention_mask=batch["attention_mask"],
-            label=batch["label"],
+            labels=batch["labels"],
         )
         # For predicting probabilities, do softmax along last dimension (by row).
         pred_class = torch.argmax(torch.softmax(outputs["logits"], dim=-1), dim=1)
         # Calculate Score
-        metrics = self._compute_metrics(pred_class, batch["label"], "Test")
+        metrics = self._compute_metrics(pred_class, batch["labels"], "Test")
 
         # wandb logging
         self.log("Test_Loss", outputs["loss"])
@@ -152,9 +161,11 @@ class TransformerModule(LightningModule):
         return outputs["loss"]
 
     def configure_optimizers(self) -> Optimizer:
-        optimizer = AdamW(
-            self.parameters(), lr=self.lr, weight_decay=0.0, betas=(0.9, 0.98)
-        )
+        if self.use_quantization:
+            from bitsandbytes.optim import PagedAdamW32bit
+            optimizer = PagedAdamW32bit(self.parameters(), lr=self.lr, weight_decay=0.0, betas=(0.9, 0.98))
+        else:
+            optimizer = AdamW(self.parameters(), lr=self.lr, weight_decay=0.0, betas=(0.9, 0.98))
         scheduler = WarmupDecayLR(optimizer, warmup_steps=10000, d_model=512)
 
         return [optimizer], [scheduler]

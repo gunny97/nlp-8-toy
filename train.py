@@ -10,15 +10,37 @@ from utils.config.cls_config import add_options
 
 
 def training_loop(config) -> TransformerModule:
+    
+    if config.target_name == 'topic':
+        num_classes = 9
+        train_data = config.train_data
+        val_data = config.val_data
+        
+    elif config.target_name == 'keyword':
+        num_classes = 87
+        train_data = config.train_data
+        val_data = config.val_data
+        
+    elif config.target_name == 'speech_act':
+        train_data = config.train_act_data
+        val_data = config.val_act_data
+        num_classes = 3
+    else:
+        raise ValueError(f"invalid target_name : {config.target_name}")
+    
+    
     model = TransformerModule(
         pretrained_model=config.pretrained_model,
-        num_classes=config.num_classes,
+        num_classes=num_classes,
         lr=config.lr,
+        use_quantization=config.use_quantization,
     )
     dm = ClsDataModule(
-        train_data=config.train_data,
-        valid_data=config.test_data,
-        test_data=config.test_data,
+        train_data=train_data,
+        val_data=val_data,
+        train_act_data=config.train_act_data,
+        val_act_data=config.val_act_data,
+        #test_data=config.test_data,
         target_name=config.target_name,
         pretrained_model=config.pretrained_model,
         max_length=config.max_length,
@@ -83,4 +105,4 @@ if __name__ == "__main__":
     train_config = add_options()
 
     # Train model.
-    trained_model, data_module = training_loop(train_config)
+    training_loop(train_config)
