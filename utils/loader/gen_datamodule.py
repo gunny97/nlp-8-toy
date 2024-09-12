@@ -10,17 +10,44 @@ from transformers import AutoTokenizer
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
-def from_processed(dir: str):
+# For Instruction Tuning
+# ALPACA_PROMPT = """Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+
+# ### Instruction:
+# {}
+
+# ### Input:
+# {}
+
+# ### Response:
+# {}"""
+
+
+PROMPT = """<bos><start_of_turn>user
+다음 글을 요약해주세요:
+{}<end_of_turn>
+<start_of_turn>model
+{}"""
+
+
+def from_processed(dir: str, tokenizer):
     df = pd.read_csv(dir)
-    prompt_list = []
-    for i in range(len(df['text'])):
-        prompt_list.append(
-            f"<bos><start_of_turn>user\n다음 글을 요약해주세요:\n"
-            f"{df['text'][i]}<end_of_turn>\n<start_of_turn>model\n"
-            f"{df['summarized_text'][i]}<end_of_turn><eos>"
-        )
+    texts = []
+    inputs = []
+    for _, row in df.iterrows():
+        input_text = row["utterances_text"]
+        target_text = row["utterances_summarize_result"]
+        texts.append(
+            PROMPT.format(input_text, target_text) + "<end_of_turn><eos>"
+        )  # 학습용
+        inputs.append(PROMPT.format(input_text, ""))  # 평가용
+
     dataset = Dataset.from_dict(
-        {"text": prompt_list, "summarized_text": df["utterances_summarize_result"].tolist()}
+        {
+            "text": texts,
+            "inputs": inputs,
+            "labels": df["utterances_summarize_result"].tolist(),
+        }
     )
     return dataset
 
@@ -47,13 +74,11 @@ class GenDataModule(pl.LightningDataModule):
 
     def setup(self, stage=None):
         if stage == "fit" or stage is None:
-            self.dsdict["train"] = from_processed(self.train_data)
-            
+            self.dsdict["train"] = from_processed(self.train_data, self.tokenizer)
+            self.dsdict["validation"] = from_processed(self.valid_data, self.tokenizer)
 
         if stage == "test" or stage is None:
-            self.dsdict["validation"] = from_processed(
-                self.valid_data
-            )
+            self.dsdict["test"] = from_processed(self.valid_data, self.tokenizer)
 
     def _preprocess(self, batch: dict) -> dict:
         tokens = self.tokenizer(
@@ -62,7 +87,8 @@ class GenDataModule(pl.LightningDataModule):
             padding="max_length",
             truncation=True,
         )
-        tokens["label"] = [label for label in batch["utterances_summarize_result"]]
+        tokens["input"] = [label for label in batch["inputs"]]
+        tokens["label"] = [label for label in batch["labels"]]
         return tokens
 
     def _shared_transform(self, split: str) -> torch.tensor:
@@ -75,9 +101,8 @@ class GenDataModule(pl.LightningDataModule):
             batched=True,
             load_from_cache_file=True,
         )
-        # print("데이터 확인 2: ", tokenized_ds[0])
         tokenized_ds.set_format(
-            type="torch", columns=["input_ids", "attention_mask", "label"]
+            type="torch", columns=["input_ids", "attention_mask", "input", "label"]
         )
         return tokenized_ds
 
@@ -98,10 +123,10 @@ class GenDataModule(pl.LightningDataModule):
             drop_last=True,
         )
 
-    # def test_dataloader(self):
-    #     return DataLoader(
-    #         dataset=self._shared_transform("test"),
-    #         batch_size=self.batch_size,
-    #         num_workers=self.num_workers,
-    #         drop_last=True,
-    #     )
+    def test_dataloader(self):
+        return DataLoader(
+            dataset=self._shared_transform("test"),
+            batch_size=self.batch_size,
+            num_workers=self.num_workers,
+            drop_last=True,
+        )

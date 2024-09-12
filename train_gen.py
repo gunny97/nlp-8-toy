@@ -3,25 +3,31 @@ import os
 import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
-from model.fine_tune_gen import TransformerModule
-# from utils.loader.gen_datamodule import CausalDataModule
+from model.fine_tune_gen import TransformerModuleForGen
+from utils.loader.gen_datamodule import GenDataModule
 from pytorch_lightning.loggers import WandbLogger
-# from utils.config.gen_config import add_options
+from utils.config.gen_config import add_options
+import os
+from huggingface_hub import login
+
+login()
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 def training_loop(config):
     """
     Training loop that sets up data module, logger, and trainer for training the model.
     """
-    model = TransformerModule(
-        pretrtrained_model=config.pretrained_model,
+    model = TransformerModuleForGen(
+        pretrained_model=config.pretrained_model,
         lr=config.lr,
+        max_length=config.max_length,
     )
 
-    dm = CausalDataModule(
+    dm = GenDataModule(
         train_data=config.train_data,
-        valid_data=config.valid_data,
-        tokenizer=model.tokenizer,
+        valid_data=config.test_data,
+        pretrained_model=config.pretrained_model,
         max_length=config.max_length,
         batch_size=config.batch_size,
         num_workers=config.num_workers,
@@ -29,10 +35,11 @@ def training_loop(config):
 
     wandb_logger = WandbLogger(
         name=f"{config.pretrained_model}_{config.exp_name}",
-        project="nlp_generation",
+        project="nlp_gen",
         save_dir=config.model_checkpoint_dir,
         log_model=True,
     )
+    wandb_logger.log_hyperparams(config)
 
     # Checkpointing and early stopping based on validation loss
     callbacks = [
@@ -42,29 +49,21 @@ def training_loop(config):
             monitor="Val_Loss",
             mode="min",
             save_top_k=1,
-        ),
-        EarlyStopping(
-            monitor="Val_Loss",
-            min_delta=config.min_delta,
-            patience=config.patience,
-            mode="min",
-        ),
+        )
     ]
 
     trainer = Trainer(
-		callbacks=callbacks,
-		devices=1,
-		accelerator="gpu",
+        callbacks=callbacks,
+        devices=1,
+        accelerator="gpu",
         max_epochs=config.epochs,
-        precision="bf16-mixed" if torch.cuda.is_available() else "32-true",
+        accumulate_grad_batches=4,
         logger=wandb_logger,
     )
 
     # Training
     trainer.fit(model=model, datamodule=dm)
 
-    # Save the fine-tuned model and LoRA adapter
-    # model.model.save_pretrained("lora_adapter_dir", save_adapter=True)
 
 if __name__ == "__main__":
 
@@ -74,4 +73,4 @@ if __name__ == "__main__":
     train_config = add_options()
 
     # Train the model
-    trained_model, data_module = training_loop(train_config)
+    training_loop(train_config)

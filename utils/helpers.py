@@ -1,7 +1,8 @@
+import torch.nn as nn
 import bitsandbytes as bnb
 
 
-def find_linear_names(model):
+def find_linear_names(model, train_mode = 'lora'):
     """
     This function identifies all linear layer names within a model that use 4-bit quantization.
     Args:
@@ -9,7 +10,7 @@ def find_linear_names(model):
     Returns:
         list: A list containing the names of all identified linear layers with 4-bit quantization.
     """
-    cls = bnb.nn.Linear4bit
+    cls = bnb.nn.Linear4bit if train_mode == 'qlora' else nn.Linear
 
     # Set to store identified layer names
     lora_module_names = set()

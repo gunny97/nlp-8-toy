@@ -27,26 +27,26 @@ class TransformerModule(LightningModule):
         lr: float,
     ):
         super().__init__()
-        # # 양자화를 사용해서 학습 시 loss가 Nan이 나오는 경우가 있어요.
-        # # 그 이유는 저도 자세히는 잘 모르겠지만 성능 측면에서는 양자화를 사용하지 않는게 좋으니 빼서 사용했어요!
-        # bnb_config = BitsAndBytesConfig(
-        #     load_in_4bit=True,
-        #     bnb_4bit_use_double_quant=True,
-        #     bnb_4bit_quant_type="nf4",
-        #     bnb_4bit_compute_dtype=torch.bfloat16
-        # )
+        # 양자화를 사용해서 학습 시 loss가 Nan이 나오는 경우가 있어요.
+        # 그 이유는 저도 자세히는 잘 모르겠지만 성능 측면에서는 양자화를 사용하지 않는게 좋으니 빼서 사용했어요!
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.bfloat16
+        )
         self.num_classes = num_classes
         self.lr = lr
         model = AutoModelForSequenceClassification.from_pretrained(
             pretrained_model_name_or_path=pretrained_model,
             num_labels=self.num_classes,
-            # quantization_config=bnb_config,
+            quantization_config=bnb_config,
         )
-        # modules  = find_linear_names(model)
+        modules  = find_linear_names(model)
 
         peft_config = LoraConfig(
             task_type=TaskType.SEQ_CLS,
-            # target_modules=modules,
+            target_modules=modules,
             lora_dropout=0.05,  # Dropout rate for the adapter
             bias="none",  # Bias configuration for the adapter
             r=64,  # 8
