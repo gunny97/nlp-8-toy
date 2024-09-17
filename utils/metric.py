@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 from datasets import load_metric
+from rouge_score import rouge_scorer
 # !python3 -m pip install rouge_score
 
 # classification
@@ -32,10 +33,13 @@ def RDASS(doc, target, pred): # (원문, 요약 target, 요약 pred)*B
     return torch.dot(a, b) / (torch.norm(a) * torch.norm(b))
   return (cos_sim(doc, pred)+cos_sim(target, pred)) / 2
   
-def ROUGE(pred, target):
-  rouge_score = load_metric("rouge")
-  scores = rouge_score.compute(
-    predictions=pred, references=target
-  )
-  return scores
-  
+def ROUGE_N(pred, target, n): # (요약 pred, 요약 target, n-gram size)
+  scorer = rouge_scorer.RougeScorer([f'rouge{n}'], use_stemmer=True) # Rouge-N 점수를 계산할 RougeScorer
+  scores = scorer.score(target, pred) # 예측 텍스트와 참조 텍스트에 대해 Rouge 점수 계산
+  return scores[f'rouge{n}'] # recall, precision, fmeasure(F1 Score) 반환
+
+def ROUGE_L(pred, target):
+  scorer = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
+  scores = scorer.score(target, pred)
+  return scores['rougeL']
+    
