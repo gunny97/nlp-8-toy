@@ -13,18 +13,13 @@ def training_loop(config) -> TransformerModule:
     
     if config.target_name == 'topic':
         num_classes = 9
-        train_data = config.train_data
-        val_data = config.val_data
         
     elif config.target_name == 'keyword':
         num_classes = 87
-        train_data = config.train_data
-        val_data = config.val_data
         
     elif config.target_name == 'speech_act':
-        train_data = config.train_act_data
-        val_data = config.val_act_data
         num_classes = 3
+        
     else:
         raise ValueError(f"invalid target_name : {config.target_name}")
     
@@ -85,15 +80,6 @@ def training_loop(config) -> TransformerModule:
         logger=wandb_logger,
     )
     trainer.fit(model=model, datamodule=dm)
-
-    # # Evaluate the last and the best models on the test sample.
-    # best_model_path = checkpoint_callback.best_model_path
-    # trainer.test(model=model, datamodule=datamodule)
-    # trainer.test(
-    #     model=model,
-    #     datamodule=datamodule,
-    #     ckpt_path=best_model_path,
-    # )
 
 
 if __name__ == "__main__":

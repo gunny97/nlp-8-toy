@@ -13,6 +13,7 @@ from torchmetrics.functional.classification import (
     multiclass_recall,
 )
 from transformers import AutoModelForSequenceClassification, BitsAndBytesConfig
+from bitsandbytes.optim import PagedAdamW
 
 
 class TransformerModule(LightningModule):
@@ -58,7 +59,7 @@ class TransformerModule(LightningModule):
             target_modules=modules,
             lora_dropout=0.05,  # Dropout rate for the adapter
             bias="none",  # Bias configuration for the adapter
-            r=64,  # 8
+            r=32,  # 8
             lora_alpha=32,
         )
         self.model = get_peft_model(model, peft_config)
@@ -163,9 +164,9 @@ class TransformerModule(LightningModule):
     def configure_optimizers(self) -> Optimizer:
         if self.use_quantization:
             from bitsandbytes.optim import PagedAdamW32bit
-            optimizer = PagedAdamW32bit(self.parameters(), lr=self.lr, weight_decay=0.0, betas=(0.9, 0.98))
+            optimizer = PagedAdamW(self.parameters(), lr=self.lr, weight_decay=0.01, betas=(0.9, 0.98))
         else:
-            optimizer = AdamW(self.parameters(), lr=self.lr, weight_decay=0.0, betas=(0.9, 0.98))
+            optimizer = AdamW(self.parameters(), lr=self.lr, weight_decay=0.01, betas=(0.9, 0.98))
         scheduler = WarmupDecayLR(optimizer, warmup_steps=10000, d_model=512)
 
         return [optimizer], [scheduler]
