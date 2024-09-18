@@ -9,10 +9,10 @@ def add_options():
     # Dataset
     # parser.add_argument("--train_data", default="resources/sample/sample_train.csv", type=str, help="상대 경로를 적어주세요!")
     # parser.add_argument("--test_data", default="resources/sample/sample_test.csv", type=str, help="상대 경로를 적어주세요!")
-    parser.add_argument("--train_data", default="resources/sample/toy_cls_train_data.csv", type=str)
-    parser.add_argument("--val_data", default="resources/sample/toy_cls_val_data.csv", type=str)
-    parser.add_argument("--train_act_data", default="resources/sample/toy_cls_act_train_data.csv", type=str)
-    parser.add_argument("--val_act_data", default="resources/sample/toy_cls_act_val_data.csv", type=str)
+    parser.add_argument("--train_data", default="resources/cls/toy_cls_train_data.csv", type=str)
+    parser.add_argument("--val_data", default="resources/cls/toy_cls_val_data.csv", type=str)
+    parser.add_argument("--train_act_data", default="resources/cls/toy_cls_act_train_data.csv", type=str)
+    parser.add_argument("--val_act_data", default="resources/cls/toy_cls_act_val_data.csv", type=str)
     
     parser.add_argument("--target_name", default="topic", type=str, 
                         choices=["topic", "keyword", "speech_act"], help="topic과 keyword는 같은 파일이고, speach_act는 또 다른 파일입니다.")

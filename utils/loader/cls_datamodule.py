@@ -17,19 +17,6 @@ def from_processed(dir: str, target_name: str):
     dataset = Dataset.from_dict(
         {"text": df["utterances_text"].tolist(), "labels": df[target_name].tolist()}
     )
-    # print("데이터 확인 : ", dataset[0])
-    
-    # dataset_dict = {
-    #     "text" : df["utterances_text"].tolist(),
-    # }
-    # if "topic" in df.columns:
-    #     dataset_dict["topic"] = df["topic"].astype("category").cat.codes.tolist()
-    # if "keyword" in df.columns:
-    #     dataset_dict["keyword"] = df["keyword"].astype("category").cat.codes.tolist()
-    # if "speech_act" in df.columns:
-    #     dataset_dict["speech_act"] = df["speech_act"].astype("category").cat.codes.tolist()
-        
-    # dataset = Dataset.from_dict(dataset_dict)
     
     return dataset
 
@@ -84,8 +71,8 @@ class ClsDataModule(pl.LightningDataModule):
             padding="max_length",
             truncation=True,
         )
-        #tokens["labels"] = torch.tensor(batch["labels"], dtype=torch.long)
-        tokens["labels"] = batch["labels"]
+        tokens["labels"] = torch.tensor(batch["labels"], dtype=torch.long)
+    
         return tokens
 
     def _shared_transform(self, split: str) -> torch.tensor:

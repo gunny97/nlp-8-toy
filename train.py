@@ -31,8 +31,8 @@ def training_loop(config) -> TransformerModule:
         use_quantization=config.use_quantization,
     )
     dm = ClsDataModule(
-        train_data=train_data,
-        val_data=val_data,
+        train_data=config.train_data,
+        val_data=config.val_data,
         train_act_data=config.train_act_data,
         val_act_data=config.val_act_data,
         #test_data=config.test_data,
