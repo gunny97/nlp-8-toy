@@ -2,6 +2,7 @@
 lightning_logs/
 mlruns/
 venv/
+code/
 .idea/
 .DS_Store
 *.pdf
@@ -13,6 +14,7 @@ venv/
 *.pyc
 *.code-workspace
 *.vscode
+*.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

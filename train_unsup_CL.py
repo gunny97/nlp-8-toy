@@ -5,8 +5,8 @@ import random
 import argparse
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
-from model.fine_tune_sts import TransformerModule
-from utils.data_module import STSDataModule
+from model.SimCSE import Model
+from utils.data_module import SimCSEDataModule
 from pytorch_lightning.loggers import WandbLogger
 
 # seed 고정
@@ -16,21 +16,22 @@ torch.cuda.manual_seed_all(104)
 random.seed(104)
 
 
-def training_loop(config) -> TransformerModule:
-    model = TransformerModule(
+def training_loop(config) -> Model:
+    # model_name, lr, temperature, dataset_size, max_epoch, batch_size, warmup, beta1, beta2, weight_decay
+    model = Model(
         model_name=config.model_name,
         lr=config.lr,
+        temperature=config.temperature,
         dataset_size=config.dataset_size,
         max_epoch=config.max_epoch,
         batch_size=config.batch_size,
         warmup=config.warmup,
         beta1=config.beta1,
         beta2=config.beta2,
-        weight_decay=config.weight_decay,
-        CL=config.CL,
+        weight_decay=config.weight_decay
     )
 
-    dm = STSDataModule(
+    dm = SimCSEDataModule(
         model_name=config.model_name,
         batch_size=config.batch_size,
         max_length=config.max_length,
@@ -52,9 +53,9 @@ def training_loop(config) -> TransformerModule:
 
     checkpoint_callback = ModelCheckpoint(
             dirpath=args.save_dir + 'ckpt',
-            filename=f"{args.warmup}_{args.beta1}_{args.beta2}_{args.weight_decay}_"+"{epoch}-{val_pearson:.3f}",
-            monitor="val_pearson",
-            mode="max",
+            filename=f"{args.warmup}_{args.beta1}_{args.beta2}_{args.weight_decay}_"+"{epoch}-{val_loss:.3f}",
+            monitor="val_loss",
+            mode="min",
             verbose=True,
             save_top_k=1,
         )
@@ -77,16 +78,16 @@ if __name__ == "__main__":
     # 하이퍼 파라미터 등 각종 설정값을 입력받습니다
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', default='deliciouscat/kf-deberta-base-cross-sts', type=str, choices=['deliciouscat/kf-deberta-base-cross-sts'])
-    parser.add_argument('--train_path', default='./resources/sts/dev.csv')
-    parser.add_argument('--dev_path', default='./resources/sts/dev.csv')
-    parser.add_argument('--test_path', default='./resources/sts/dev.csv')
-    parser.add_argument('--predict_path', default='./resources/sts/test.csv')
-    parser.add_argument('--CL', default=None, help='Load Unsupervised Contrastive Learning Model')
+    parser.add_argument('--train_path', default='./resources/sts/dev_contrastive.csv')
+    parser.add_argument('--dev_path', default='./resources/sts/dev_contrastive.csv')
+    parser.add_argument('--test_path', default='./resources/sts/dev_contrastive.csv')
+    parser.add_argument('--predict_path', default='./resources/sts/dev_contrastive.csv')
     parser.add_argument('--save_dir', default='./resources/log/v1_CL/')
-    parser.add_argument('--batch_size', default=32, type=int)
-    parser.add_argument('--max_epoch', default=1, type=int)
+    parser.add_argument('--batch_size', default=16, type=int)
+    parser.add_argument('--max_epoch', default=20, type=int)
     parser.add_argument('--dataset_size', default=9324, type=int, choices=[9324])
-    parser.add_argument('--max_length', default=128, type=int)
+    parser.add_argument('--max_length', default=64, type=int)
+    parser.add_argument('--temperature', default=0.05, type=float)
     parser.add_argument('--lr', default=1e-5, type=float)
     parser.add_argument("--warmup", type=int, default=800, help="Number of warmup steps", choices=[500, 600, 1000, 2000])
     parser.add_argument('--beta1', default=0.9, type=float)

@@ -1,4 +1,4 @@
-name: lightning-mlflow-hf
+name: sh
 channels:
   - conda-forge
   - nodefaults
