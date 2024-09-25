@@ -38,7 +38,12 @@ GPU : Tesla V100 *4
 <br>
 
 ## 3. 사용한 데이터셋
-저희가 사용한 데이터셋은 id, source, sentence_1, sentence_2, label, binary-label로 구성되어 있습니다. 여기서 label은 사람이 직접 두 문장의 유사성에 대해 점수를 매긴 것이고 binary-label은 2.5점을 기준으로 0과 1로 구분한 것입니다.
+저희가 사용한 데이터셋은 id, source, sentence_1, sentence_2, label, binary-label로 구성되어 있습니다. 
+id : 문장 고유 id <br>
+source : 문장 출처 <br>
+sentence_1, sentence_2 : 유사성을 비교할 두 문장 <br>
+label : 문장 쌍의 유사도로, 0~5점 사이 값을 가지고 있고 소수점 첫째 자리까지 <br>
+binary-label : 2.5점을 기준으로 0과 1로 구분한 것 <br>
 ### 데이터 분포
 ![Alt text](사진 경로)
 ### 데이터 증강
