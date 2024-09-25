@@ -1,5 +1,5 @@
 # 🔥 네이버 AI Tech NLP 8조 The AIluminator 🌟
-
+# Level 1 Project - Semantic Text Similarity (STS)
 
 ## Table of Contents
 1. [Installation and Quick Start](#1-installation-and-quick-start)
