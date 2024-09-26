@@ -103,23 +103,23 @@ label 별 분포
 ```sh
 .
 ├── model
-│   ├── __init__.py
-│   ├── fine_tune_cls.py
-│   └── ... # 필요한 모델 생성
+│     ├── fine_tune_sts.py      # STS Model
+│     └── SimCSE.py
+├── preprocessing
+│         ├── BERT_augmentation.py
+│         ├── EDA.py
+│         ├── adverb_augmentation.py
+│         ├── v1_downsampling.ipynb
+│         ├── v2_augmentation_biassed.ipynb
+│         └── v3_augmentation_uniform.ipynb
 ├── resources
-│   ├── log
-│   ├── sample
-│   └── ... # 필요한 폴더 생성
+│       ├── log
+│       └── sample      # dataset
 ├── utils
-│   ├── config
-│   ├── ├── cls_config.py
-│   ├── └── ... # 필요한 config 생성
-│   ├── loader
-│   ├── ├── cls_datamodule.py
-│   ├── └── ... # 필요한 datamodule 생성
-│   ├── log
-│   ├── helpers.py
-│   ├── scheduler.py
-│   └── ... # 필요한 util 함수 생성
-└── train.py 
+│     ├── data_modeul.py      # STS DataModule
+│     └── helpers.py
+└── environment.yml
+├── train.py
+├── train_unsup_CL.py
+└── inference.py
 ```
