@@ -25,7 +25,7 @@ GPU : Tesla V100 * 4
 ## 2. 팀원 소개
 |김동한|김성훈|김수아|김현욱|송수빈|신수환|
 |:--:|:--:|:--:|:--:|:--:|:--:|
-|![Alt text](./markdownimg/image-3.png)|![Alt text]()|![Alt text]()|![Alt text]()|![Alt text]()|![Alt text]()|
+|![Alt text](./markdownimg/image-3.png)|![Alt text]()|![Alt text]()|<img src="https://github.com/user-attachments/assets/c90f4226-3bea-41d9-8b28-4d6227c1d254" width="100" height="100" />|![Alt text]()|![Alt text]()|
 |[Github]()|[Github]()|[Github](https://github.com/tndkkim)|[Github](https://github.com/hwk9764)|[Github]()|[Github]()|
 
 ### 맡은 역할
@@ -72,9 +72,16 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 |**V2_augmentation_biased**| augmentation|
 |**V3_augmentation_uniform**|1. `0.5, 1.5, 1.6, 2.2, 2.4, 2.5, 3.5 데이터에 대해 Adverb Augmentation 수행` <br> 2. `0.5, 0.6, 0.8, 1.0, 1.2, 1.4, 1.8, 2.6, 2.8, 3, 3.2, 3.4, 3.5 데이터에 대해 Sentence Swap 수행` <br> 3. `1.5, 2.5, 3.5 데이터에 대해 BERT-Masking Insertion 수행` <br> * 데이터 증강 과정에서 라벨 분포를 균형있게 맞추고자 **라벨별 증강 비율을 조정**하였습니다.|
 
-
+### 증강 데이터 분포
+**V1_Downsampling**
 ![Alt text](./markdownimg/image-9.png)
-
+**V2_augmentation_biased**
+![Alt text](./markdownimg/image-9.png)
+**V3_augmentation_uniform**
+label 별 분포
+![image](https://github.com/user-attachments/assets/4bac99f6-5b77-465a-8d34-6fb30441bc6e)
+0.5 구간 별 분포
+![image](https://github.com/user-attachments/assets/2518d00a-0b11-4ccb-9eba-709bac30ff76)
 <br>
 
 ## 4. 모델
