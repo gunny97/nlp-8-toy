@@ -79,21 +79,21 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 <br>
 label 별 분포
 <br>
-<img src="링크 넣어주세요" width="600" height="450" />
+<img src="링크 넣어주세요" width="560" height="420" />
 <br>
 0.5단위 구간 별 분포
 <br>
-<img src="링크 넣어주세요" width="500" height="400" />
+<img src="링크 넣어주세요" width="560" height="420" />
 <br>
 **V2_augmentation_biased**
 <br>
 label 별 분포
 <br>
-<img src="링크 넣어주세요" width="600" height="450" />
+<img src="링크 넣어주세요" width="560" height="420" />
 <br>
 0.5단위 구간 별 분포
 <br>
-<img src="링크 넣어주세요" width="500" height="400" />
+<img src="링크 넣어주세요" width="560" height="420" />
 <br>
 **V3_augmentation_uniform**
 <br>
