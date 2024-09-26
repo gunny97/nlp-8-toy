@@ -10,18 +10,23 @@
 
 ## 1. 프로젝트 소개
 1. 주제 및 목표 <br>
+- 부스트캠프 AI Tech NLP 트랙 level 1 기초 대회
+- 주제 : 문장 간 유사도 측정 (Semantic Text Similarity, STS)    
+      : STS 데이터셋을 활용해 두 문장의 유사도를 0 ~ 5 사이의 점수로 예측한다.  
 2. 평가지표 <br>
-Pearson Correlation Coefficient
+- 피어슨 상관 계수(Pearson Correlation Coefficient ,PCC)
 3. 개발 환경 <br>
-GPU : Tesla V100 *4
+GPU : Tesla V100 * 4
 4. 협업 환경 <br>
-노션, 슬랙
+- 노션 - 팀 노션 페이지에 해야할 일, 상황 공유    
+- 슬랙 - 허들, DM을 활용해 팀원 간 실시간 소통   
+- 깃허브 - 코드 공유
 
 ## 2. 팀원 소개
 |김동한|김성훈|김수아|김현욱|송수빈|신수환|
 |:--:|:--:|:--:|:--:|:--:|:--:|
 |![Alt text](./markdownimg/image-3.png)|![Alt text]()|![Alt text]()|![Alt text]()|![Alt text]()|![Alt text]()|
-|[Github]()|[Github]()|[Github]()|[Github](https://github.com/hwk9764)|[Github]()|[Github]()|
+|[Github]()|[Github]()|[Github](https://github.com/tndkkim)|[Github](https://github.com/hwk9764)|[Github]()|[Github]()|
 
 ### 맡은 역할
 <br>
@@ -30,7 +35,7 @@ GPU : Tesla V100 *4
 |--|--|
 |**김동한**|**EDA**(`데이터 셋 특성 분석`), **데이터 증강**(`back translation`), **모델링 및 튜닝**(`Bert, Roberta, Albert, SBERT, WandB`)|
 |**김성훈**|**EDA**(`label-pred 분포 분석`), **데이터 증강**(`back translation/nnp_sl_masking/어순도치/단순복제`), **모델 튜닝**(`roberta-large, kr-electra-discriminator`)|
-|**김수아**|**EDA**(`label 분포 및 문장 길이 분석`), **데이터 증강**(`sentence swap`), **모델링 및 튜닝**(`KoSimCSE-roberta, 해당 모델 기반 Siamese Network 적용 모델`)|
+|**김수아**|**EDA**(`label 분포 및 문장 길이 분석`)
 |**김현욱**|**EDA**(`label 분포 분석`), **데이터 증강**(`/sentence swap/Adverb Augmentation/BERT-Mask Insertion`)|
 |**송수빈**|**데이터 전처리**(`띄어쓰기 통일`), **데이터 증강**(`부사/고유명사 제거 Augmentation`), **모델링**(`KoSimCSE-roberta`), **앙상블**(`variance-based ensemble`)|
 |**신수환**|**모델링 및 튜닝**(`RoBERTa, T5, SBERT`), **모델 경량화**(`Roberta-large with deepspeed`)|
@@ -38,15 +43,19 @@ GPU : Tesla V100 *4
 <br>
 
 ## 3. 사용한 데이터셋
-저희가 사용한 데이터셋은 id, source, sentence_1, sentence_2, label, binary-label로 구성되어 있습니다. <br>
+데이터는 train.csv / dev.csv / test.csv의 3개의 파일로 되어있으며 각 파일의 column은 다음과 같이 구성되어있다. <br>
+![Alt text](./markdownimg/data_column.png)  
+
 **id** : 문장 고유 id <br>
 **source** : 문장 출처 <br>
 **sentence_1, sentence_2** : 유사성을 비교할 두 문장 <br>
-**label** : 문장 쌍의 유사도로, 0~5점 사이 값을 가지고 있고 소수점 첫째 자리까지 <br>
-**binary-label** : 2.5점을 기준으로 0과 1로 구분한 것 <br>
+**label** : 문장 쌍의 유사도. 0~5점 사이 값으로 소수점 첫째 자리까지 표현됨 <br>
+**binary-label** : label 2.5점을 기준으로 0과 1로 변환한 값 <br>
 
 ### 데이터 분포
-![Alt text](사진 경로)
+train data의 경우 label 0.0에 데이터가 쏠린 반면 dev data의 경우 비교적 균등하게 데이터가 분포되어있음을 알 수 있다. <br>
+![Alt text](./markdownimg/train_dev_state.png)  
+train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이터 수를 줄이고 여러 증강 기법들을을 활용하였다. <br>
 <br>
 
 ### 데이터 증강
