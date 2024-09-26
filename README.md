@@ -87,7 +87,7 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 <br>
 label 별 분포
 <br>
-<img src="https://github.com/user-attachments/assets/ac0d5f75-4a50-48d7-b8a1-a106e274eefe" width="650" height="450" />
+<img src="https://github.com/user-attachments/assets/ac0d5f75-4a50-48d7-b8a1-a106e274eefe" width="600" height="450" />
 <br>
 0.5단위 구간 별 분포
 <br>
