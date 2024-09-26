@@ -28,7 +28,7 @@
 ## 2. 팀원 소개
 |김동한|김성훈|김수아|김현욱|송수빈|신수환|
 |:--:|:--:|:--:|:--:|:--:|:--:|
-|![Alt text](./markdownimg/image-3.png)|<img src="https://github.com/user-attachments/assets/62829d6a-13c9-40dd-807a-116347c1de11" width="100" height="100" />|<img src="https://github.com/user-attachments/assets/5933a9e6-b5b8-41df-b050-c0a89ec19607" width="100" height="100" />|<img src="https://github.com/user-attachments/assets/c90f4226-3bea-41d9-8b28-4d6227c1d254" width="100" height="100" />|![Alt text]()|<img src="https://github.com/user-attachments/assets/8d806852-764d-499b-a780-018b6cf32b8d" width="100" height="100" />|
+|<img src="https://github.com/user-attachments/assets/c7d1807e-ef20-4c82-9a88-bc0eb5a700f4" width="100" height="100" />|<img src="https://github.com/user-attachments/assets/62829d6a-13c9-40dd-807a-116347c1de11" width="100" height="100" />|<img src="https://github.com/user-attachments/assets/5933a9e6-b5b8-41df-b050-c0a89ec19607" width="100" height="100" />|<img src="https://github.com/user-attachments/assets/c90f4226-3bea-41d9-8b28-4d6227c1d254" width="100" height="100" />|<img src="<img src="https://github.com/user-attachments/assets/c90f4226-3bea-41d9-8b28-4d6227c1d254" width="100" height="100" />" width="100" height="100" />|<img src="https://github.com/user-attachments/assets/8d806852-764d-499b-a780-018b6cf32b8d" width="100" height="100" />|
 |[Github]()|[Github]()|[Github](https://github.com/tndkkim)|[Github](https://github.com/hwk9764)|[Github](https://github.com/suvinn)|[Github]()|
 
 ### 맡은 역할
@@ -71,7 +71,7 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 |:--:|--|
 |**V1_Downsampling** |Downsampling된 1000개의 문장으로 V2에서 (4.0, 5.0] label의 data augmentation을 진행할 것이기 때문에, label이 0.0인 데이터셋에서 문장 내 token 수가 3개 이상이면서, K-TACC 증강 방법 중 random_masking_insertion을 진행했을 때 증강이 되는 문장을 선별했습니다. sentence_1과 sentence_2 모두 증강된 index만 고려하면서, sentence_1을 기준으로 유사도가 높은 상위 1000개의 index를 선별했습니다. 문장 간 유사도가 고려되지 못한 sentence_2 데이터셋에 대해서는 추후 data filtering을 거쳤습니다.|
 |**V2_augmentation_biassed**|V1에서 Downsampling된 1000개 데이터셋을 증강한 데이터셋 중에서도 label이 5.0인 데이터셋은 큰 차이가 없어야 한다고 판단하여, 불용어 제거 후 같은 문장을 나타낼 때의 데이터를 label 5.0에 할당했습니다. label이 (4.0, 5.0)인 데이터셋은 라벨 간의 비율을 직접 조정하면서, 유사도가 높은 순서대로 개수에 맞게 할당했습니다.|
-|**V3_augmentation_uniform**|1. `0.5, 1.5, 1.6, 2.2, 2.4, 2.5, 3.5 데이터에 대해 Adverb Augmentation 수행` <br> 2. `0.5, 0.6, 0.8, 1.0, 1.2, 1.4, 1.8, 2.6, 2.8, 3, 3.2, 3.4, 3.5 데이터에 대해 Sentence Swap 수행` <br> 3. `1.5, 2.5, 3.5 데이터에 대해 BERT-Masking Insertion 수행` <br> * 데이터 증강 과정에서 라벨 분포를 균형있게 맞추고자 **라벨별 증강 비율을 조정**하였습니다.|
+|**V3_augmentation_uniform**| 총 3단계에 걸쳐 증강하였는데, 1단계로 개수가 적은 일부 데이터(`0.5, 1.5, 1.6, 2.2, 2.4, 2.5, 3.5`)에 대해 Adverb Augmentation 수행하고, 그 후에도 개수가 적은 일부 데이터(`0.5, 0.6, 0.8, 1.0, 1.2, 1.4, 1.8, 2.6, 2.8, 3, 3.2, 3.4, 3.5`)에 대해 2단계로 Sentence Swap 수행하였습니다. 3단계로 `1.5, 2.5, 3.5 데이터에 대해 BERT-Masking Insertion 수행` <br> * 데이터 증강 과정에서 라벨 분포를 균형있게 맞추고자 **라벨별 증강 비율을 조정**하였습니다.|
 |**V4_augmentation_hanspell**|label이 0.0인 데이터셋 중 맞춤법 교정 라이브러리 hanspell이 sentence_1과 sentence_2 모두에 적용된 index 776개를 뽑고, 증강된 데이터셋들을 label 4.8에 493개, label 5.0에 1059개 할당하였습니다. label이 (0.0, 4.4]인 데이터셋은 sentence swapping을 진행했습니다. V2의 데이터셋 중 500개를 뽑아와 label 4.6에 450개, 4.5에 50개 할당하여 라벨 간의 비율을 조정하였습니다.|
 
 ### 증강 데이터 분포
@@ -87,11 +87,11 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 <br>
 label 별 분포
 <br>
-![image](https://github.com/user-attachments/assets/4bac99f6-5b77-465a-8d34-6fb30441bc6e)
+![image](https://github.com/user-attachments/assets/ac0d5f75-4a50-48d7-b8a1-a106e274eefe)
 <br>
 0.5단위 구간 별 분포
 <br>
-![image](https://github.com/user-attachments/assets/2518d00a-0b11-4ccb-9eba-709bac30ff76)
+![image](https://github.com/user-attachments/assets/33d6c69f-c602-4129-ae9f-5f5b98a87362)
 <br>
 
 ## 4. 모델
