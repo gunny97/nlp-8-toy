@@ -99,7 +99,7 @@ label 별 분포
 <br>
 label 별 분포
 <br>
-<img src="https://github.com/user-attachments/assets/ac0d5f75-4a50-48d7-b8a1-a106e274eefe" width="600" height="450" />
+<img src="https://github.com/user-attachments/assets/ac0d5f75-4a50-48d7-b8a1-a106e274eefe" width="560" height="420" />
 <br>
 0.5단위 구간 별 분포
 <br>
