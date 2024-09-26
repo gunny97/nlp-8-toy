@@ -29,7 +29,7 @@
 |김동한|김성훈|김수아|김현욱|송수빈|신수환|
 |:--:|:--:|:--:|:--:|:--:|:--:|
 |![Alt text](./markdownimg/image-3.png)|<img src="https://github.com/user-attachments/assets/62829d6a-13c9-40dd-807a-116347c1de11" width="100" height="100" />|<img src="https://github.com/user-attachments/assets/5933a9e6-b5b8-41df-b050-c0a89ec19607" width="100" height="100" />|<img src="https://github.com/user-attachments/assets/c90f4226-3bea-41d9-8b28-4d6227c1d254" width="100" height="100" />|![Alt text]()|<img src="https://github.com/user-attachments/assets/8d806852-764d-499b-a780-018b6cf32b8d" width="100" height="100" />|
-|[Github]()|[Github]()|[Github](https://github.com/tndkkim)|[Github](https://github.com/hwk9764)|[Github]()|[Github]()|
+|[Github]()|[Github]()|[Github](https://github.com/tndkkim)|[Github](https://github.com/hwk9764)|[Github](https://github.com/suvinn)|[Github]()|
 
 ### 맡은 역할
 |**member**|**role**|
@@ -61,15 +61,15 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 ### 데이터 증강
 |**Version**|**Abstract**|**num**|
 |:--:|--|:--:|
-|**V1_Downsampling**|label 0인 값 천개 downsampling????|개수|
-|**V2_augmentation_biased**|`원본 데이터` + `맞춤법 검사 데이터` + `SR` + `Swap Sentence` + `Copied Sentence`|개수|
+|**V1_Downsampling**|label 0.0 데이터 1000개 downsampling|8,324|
+|**V2_augmentation_biased**|`AugmentationV1` + `BERT-Token Insertion`|9,994|
 |**V3_augmentation_uniform**|`AugmentationV2` + `Adverb Augmentation + Sentence Swap + BERT-Token Insertion`|15,541|
 
 ### 증강 데이터 버전 설명
 |**Version**|**Description**|
 |:--:|--|
-|**V1_Downsampling** | downsampling |
-|**V2_augmentation_biased**| augmentation|
+|**V1_Downsampling** |Downsampling된 1000개의 문장으로 V2에서 (4.0, 5.0] label의 data augmentation을 진행할 것이기 때문에, label이 0.0인 데이터셋에서 문장 내 token 수가 3개 이상이면서, K-TACC 증강 방법 중 random_masking_insertion을 진행했을 때 증강이 되는 문장을 선별했습니다. sentence_1과 sentence_2 모두 증강된 index만 고려하면서, sentence_1을 기준으로 유사도가 높은 상위 1000개의 index를 선별했습니다. 문장 간 유사도가 고려되지 못한 sentence_2 데이터셋에 대해서는 추후 추가적인 filtering을 거쳤습니다.|
+|**V2_augmentation_biased**|증강된 V1의 데이터셋 중에서도 label이 5.0인 데이터셋은 큰 차이가 없어야 한다고 판단하여, 불용어 제거 후 같은 문장을 나타낼 때의 데이터를 label 5.0에 할당했습니다. label이 (4.0, 5.0)인 데이터셋은 라벨 간의 비율을 직접 조정하면서, 유사도가 높은 순서대로 개수에 맞게 할당했습니다.|
 |**V3_augmentation_uniform**|1. `0.5, 1.5, 1.6, 2.2, 2.4, 2.5, 3.5 데이터에 대해 Adverb Augmentation 수행` <br> 2. `0.5, 0.6, 0.8, 1.0, 1.2, 1.4, 1.8, 2.6, 2.8, 3, 3.2, 3.4, 3.5 데이터에 대해 Sentence Swap 수행` <br> 3. `1.5, 2.5, 3.5 데이터에 대해 BERT-Masking Insertion 수행` <br> * 데이터 증강 과정에서 라벨 분포를 균형있게 맞추고자 **라벨별 증강 비율을 조정**하였습니다.|
 
 ### 증강 데이터 분포
