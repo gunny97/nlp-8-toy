@@ -94,7 +94,7 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 |label 별 분포|0.5단위 구간 별 분포|
 <br>
 
-**V3_augmentation_hanspell**
+**V4_augmentation_hanspell**
 |<img src="https://github.com/user-attachments/assets/5be1d51a-96e6-4210-87c9-826a3dfd285c" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/eb403cf1-9ccd-4a7f-80f1-50ba363f0861" width="550" height="440" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
