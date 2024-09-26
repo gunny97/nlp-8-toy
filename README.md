@@ -76,9 +76,10 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 
 ### 증강 데이터 분포
 **V1_Downsampling**
-|label 별 분포|0.5단위 구간 별 분포|
-|:--:|:--:|
+<br>
 |<img src="https://github.com/user-attachments/assets/543fb669-dc70-4f78-9cd6-8bbcd5307ca7" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/dec4e8d2-8570-4f31-a301-dfeb82b2f209" width="550" height="440" />|
+|label 별 분포|0.5단위 구간 별 분포|
+<br>
 **V2_augmentation_biased**
 <br>
 label 별 분포
