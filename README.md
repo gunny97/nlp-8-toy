@@ -84,29 +84,17 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 |<img src="https://github.com/user-attachments/assets/aaf45453-c43b-4c24-9a5d-2cb537d0a101" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/f08d04e6-cb61-4cce-a4c9-ae8ba525a215" width="550" height="440" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
-<br>
 
-<br>
 **V3_augmentation_uniform**
-<br>
-label 별 분포
-<br>
-<img src="https://github.com/user-attachments/assets/ac0d5f75-4a50-48d7-b8a1-a106e274eefe" width="560" height="420" />
-<br>
-0.5단위 구간 별 분포
-<br>
-<img src="https://github.com/user-attachments/assets/33d6c69f-c602-4129-ae9f-5f5b98a87362" width="550" height="440" />
-<br>
+|<img src="https://github.com/user-attachments/assets/ac0d5f75-4a50-48d7-b8a1-a106e274eefe" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/33d6c69f-c602-4129-ae9f-5f5b98a87362" width="550" height="440" />|
+|:--:|:--:|
+|label 별 분포|0.5단위 구간 별 분포|
+
 **V3_augmentation_hanspell**
-<br>
-label 별 분포
-<br>
-<img src="https://github.com/user-attachments/assets/5be1d51a-96e6-4210-87c9-826a3dfd285c" width="560" height="420" />
-<br>
-0.5단위 구간 별 분포
-<br>
-<img src="https://github.com/user-attachments/assets/eb403cf1-9ccd-4a7f-80f1-50ba363f0861" width="550" height="440" />
-<br>
+|<img src="https://github.com/user-attachments/assets/5be1d51a-96e6-4210-87c9-826a3dfd285c" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/eb403cf1-9ccd-4a7f-80f1-50ba363f0861" width="550" height="440" />|
+|:--:|:--:|
+|label 별 분포|0.5단위 구간 별 분포|
+
 
 ## 4. 모델
 |**Model**|**Learing Rate**|**Batch Size**|**loss**|**epoch**|**beta**|**Data Augmentation**|**Public Pearson**|**Ensemble Weight**|
