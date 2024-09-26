@@ -84,7 +84,7 @@ label 별 분포
 <br>
 ![image](https://github.com/user-attachments/assets/4bac99f6-5b77-465a-8d34-6fb30441bc6e)
 <br>
-0.5 구간 별 분포
+0.5단위 구간 별 분포
 <br>
 ![image](https://github.com/user-attachments/assets/2518d00a-0b11-4ccb-9eba-709bac30ff76)
 <br>
