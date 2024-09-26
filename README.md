@@ -54,7 +54,7 @@
 
 ### 데이터 분포
 train data의 경우 label 0.0에 데이터가 쏠린 반면 dev data의 경우 비교적 균등하게 데이터가 분포되어있음을 알 수 있다. <br>
-<img src="./markdownimg/train_dev_state.png" width="650" height="500"/>
+<img src="./markdownimg/train_dev_state.png" width="600" height="400"/>
 train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이터 수를 줄이고 여러 증강 기법들을을 활용하였다. <br>
 <br>
 
