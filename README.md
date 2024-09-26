@@ -33,12 +33,12 @@ GPU : Tesla V100 * 4
 
 |**팀원**|**역할**|
 |--|--|
-|**김동한**|**EDA**(`데이터 셋 특성 분석`), **데이터 증강**(`back translation`), **모델링 및 튜닝**(`Bert, Roberta, Albert, SBERT, WandB`)|
-|**김성훈**|**EDA**(`label-pred 분포 분석`), **데이터 증강**(`back translation/nnp_sl_masking/어순도치/단순복제`), **모델 튜닝**(`roberta-large, kr-electra-discriminator`)|
-|**김수아**|**EDA**(`label 분포 및 문장 길이 분석`)
-|**김현욱**|**EDA**(`label 분포 분석`), **데이터 증강**(`/sentence swap/Adverb Augmentation/BERT-Mask Insertion`)|
-|**송수빈**|**데이터 전처리**(`띄어쓰기 통일`), **데이터 증강**(`부사/고유명사 제거 Augmentation`), **모델링**(`KoSimCSE-roberta`), **앙상블**(`variance-based ensemble`)|
-|**신수환**|**모델링 및 튜닝**(`RoBERTa, T5, SBERT`), **모델 경량화**(`Roberta-large with deepspeed`)|
+|**김동한** |**EDA**(`데이터 셋 특성 분석`), **데이터 증강**(`back translation`), **모델링 및 튜닝**(`Bert, Roberta, Albert, SBERT, WandB`)|
+|**김성훈** |**EDA**(`label-pred 분포 분석`), **데이터 증강**(`back translation/nnp_sl_masking/어순도치/단순복제`), **모델 튜닝**(`roberta-large, kr-electra-discriminator`)|
+|**김수아** |**EDA**(`label 분포 및 문장 길이 분석`)
+|**김현욱** |**EDA**(`label 분포 분석`), **데이터 증강**(`/sentence swap/Adverb Augmentation/BERT-Mask Insertion`)|
+|**송수빈** |**데이터 전처리**(`띄어쓰기 통일`), **데이터 증강**(`부사/고유명사 제거 Augmentation`), **모델링**(`KoSimCSE-roberta`), **앙상블**(`variance-based ensemble`)|
+|**신수환** |**모델링 및 튜닝**(`RoBERTa, T5, SBERT`), **모델 경량화**(`Roberta-large with deepspeed`)|
 
 <br>
 
@@ -74,13 +74,21 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 
 ### 증강 데이터 분포
 **V1_Downsampling**
+<br>
 ![Alt text](./markdownimg/image-9.png)
+<br>
 **V2_augmentation_biased**
+<br>
 ![Alt text](./markdownimg/image-9.png)
+<br>
 **V3_augmentation_uniform**
+<br>
 label 별 분포
+<br>
 ![image](https://github.com/user-attachments/assets/4bac99f6-5b77-465a-8d34-6fb30441bc6e)
+<br>
 0.5 구간 별 분포
+<br>
 ![image](https://github.com/user-attachments/assets/2518d00a-0b11-4ccb-9eba-709bac30ff76)
 <br>
 
