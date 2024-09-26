@@ -63,7 +63,7 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 |:--:|--|:--:|
 |**V1_Downsampling**|label 0.0 데이터 1000개 downsampling|8,324|
 |**V2_augmentation_biased**|`AugmentationV1` + `BERT-Token Insertion`|9,994|
-|**V3_augmentation_uniform**|`AugmentationV2` + `Adverb Augmentation + Sentence Swap + BERT-Token Insertion`|15,541|
+|**V3_augmentation_uniform**|`AugmentationV2` + `Adverb Augmentation` + `Sentence Swap` + `BERT-Token Insertion`|15,541|
 |**V4_augmentation_hanspell**|`AugmentationV2` + `hanspell` + `Sentence Swap` |17,313|
 
 ### 증강 데이터 버전 설명
