@@ -54,7 +54,7 @@
 
 ### 데이터 분포
 train data의 경우 label 0.0에 데이터가 쏠린 반면 dev data의 경우 비교적 균등하게 데이터가 분포되어있음을 알 수 있다. <br>
-<img src="./markdownimg/train_dev_state.png" width="600" height="450"/>
+<img src="./markdownimg/train_dev_state.png" width="600" height="450"/> <br>
 train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이터 수를 줄이고 여러 증강 기법들을을 활용하였다. <br>
 <br>
 
@@ -80,25 +80,25 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 |<img src="https://github.com/user-attachments/assets/543fb669-dc70-4f78-9cd6-8bbcd5307ca7" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/dec4e8d2-8570-4f31-a301-dfeb82b2f209" width="550" height="440" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
-
+<br>
 
 **V2_augmentation_biased**
 |<img src="https://github.com/user-attachments/assets/aaf45453-c43b-4c24-9a5d-2cb537d0a101" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/f08d04e6-cb61-4cce-a4c9-ae8ba525a215" width="550" height="440" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
-
+<br>
 
 **V3_augmentation_uniform**
 |<img src="https://github.com/user-attachments/assets/ac0d5f75-4a50-48d7-b8a1-a106e274eefe" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/33d6c69f-c602-4129-ae9f-5f5b98a87362" width="550" height="440" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
-
+<br>
 
 **V3_augmentation_hanspell**
 |<img src="https://github.com/user-attachments/assets/5be1d51a-96e6-4210-87c9-826a3dfd285c" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/eb403cf1-9ccd-4a7f-80f1-50ba363f0861" width="550" height="440" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
-
+<br>
 
 
 ## 4. 모델
