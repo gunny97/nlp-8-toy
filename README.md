@@ -29,8 +29,8 @@ GPU : Tesla V100 * 4
 |[Github]()|[Github]()|[Github](https://github.com/tndkkim)|[Github](https://github.com/hwk9764)|[Github]()|[Github]()|
 
 ### 맡은 역할
-|**member**|**역할**|
-|:--:|--|
+|**팀원**|**역할**|
+|:--:|:--:|
 |**김동한**| **EDA**(`데이터 셋 특성 분석`), **데이터 증강**(`back translation`), **모델링 및 튜닝**(`Bert, Roberta, Albert, SBERT, WandB`)|
 |**김성훈**| **EDA**(`label-pred 분포 분석`), **데이터 증강**(`back translation/nnp_sl_masking/어순도치/단순복제`), **모델 튜닝**(`roberta-large, kr-electra-discriminator`)|
 |**김수아**| **EDA**(`label 분포 및 문장 길이 분석`)
