@@ -74,26 +74,31 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 |**V3_augmentation_uniform**| label 분포를 균형있게 맞추어 전체적인 데이터 분포를 고르게 하기 위해 **라벨별 증강 비율을 조정**하여 총 3단계에 걸쳐 증강했고 매 단계마다 데이터의 개수가 적은 label들을 집중적으로 증강했습니다. <br> 1단계로 label이 `0.5, 1.5, 1.6, 2.2, 2.4, 2.5, 3.5` 데이터에 대해 Adverb Augmentation 수행했습니다. 2단계로 label이 `0.5, 0.6, 0.8, 1.0, 1.2, 1.4, 1.8, 2.6, 2.8, 3, 3.2, 3.4, 3.5` 데이터에 대해 Sentence Swap 수행하였습니다. 3단계로 `1.5, 2.5, 3.5` 데이터에 대해 random_masking_insertion을 수행하였으며 추가로 `1.5, 2.5` 데이터 중 Masking Insertion한 증강 데이터에 대해 Sentence Swap을 수행했습니다.|
 |**V4_augmentation_hanspell**|label이 0.0인 데이터셋 중 맞춤법 교정 라이브러리 hanspell이 sentence_1과 sentence_2 모두에 적용된 index 776개를 뽑고, 증강된 데이터셋들을 label 4.8에 493개, label 5.0에 1059개 할당하였습니다. label이 (0.0, 4.4]인 데이터셋은 sentence swapping을 진행하였습니다. V2의 데이터셋 중 500개를 뽑아와 label 4.6에 450개, 4.5에 50개 할당하여 라벨 간 비율이 비숫해지도록 조정하였습니다.|
 
+
 ### 증강 데이터 분포
 **V1_Downsampling**
 |<img src="https://github.com/user-attachments/assets/543fb669-dc70-4f78-9cd6-8bbcd5307ca7" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/dec4e8d2-8570-4f31-a301-dfeb82b2f209" width="550" height="440" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
 
+
 **V2_augmentation_biased**
 |<img src="https://github.com/user-attachments/assets/aaf45453-c43b-4c24-9a5d-2cb537d0a101" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/f08d04e6-cb61-4cce-a4c9-ae8ba525a215" width="550" height="440" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
+
 
 **V3_augmentation_uniform**
 |<img src="https://github.com/user-attachments/assets/ac0d5f75-4a50-48d7-b8a1-a106e274eefe" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/33d6c69f-c602-4129-ae9f-5f5b98a87362" width="550" height="440" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
 
-**V3_augmentation_hanspell**
+
+**V3_augmentation_hanspell**
 |<img src="https://github.com/user-attachments/assets/5be1d51a-96e6-4210-87c9-826a3dfd285c" width="560" height="420" />|<img src="https://github.com/user-attachments/assets/eb403cf1-9ccd-4a7f-80f1-50ba363f0861" width="550" height="440" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
+
 
 
 ## 4. 모델
