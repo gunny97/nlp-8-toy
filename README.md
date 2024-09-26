@@ -25,7 +25,7 @@ GPU : Tesla V100 * 4
 ## 2. 팀원 소개
 |김동한|김성훈|김수아|김현욱|송수빈|신수환|
 |:--:|:--:|:--:|:--:|:--:|:--:|
-|![Alt text](./markdownimg/image-3.png)|![Alt text]()|![Alt text]()|<img src="https://github.com/user-attachments/assets/c90f4226-3bea-41d9-8b28-4d6227c1d254" width="100" height="100" />|![Alt text]()|![Alt text]()|
+|![Alt text](./markdownimg/image-3.png)|<img src="https://github.com/user-attachments/assets/c90f4226-3bea-41d9-8b28-4d6227c1d254" width="100" height="100" />|<img src="https://github.com/user-attachments/assets/8d806852-764d-499b-a780-018b6cf32b8d" width="100" height="100" />|<img src="https://github.com/user-attachments/assets/c90f4226-3bea-41d9-8b28-4d6227c1d254" width="100" height="100" />|![Alt text]()|<img src="https://github.com/user-attachments/assets/8d806852-764d-499b-a780-018b6cf32b8d" width="100" height="100" />|
 |[Github]()|[Github]()|[Github](https://github.com/tndkkim)|[Github](https://github.com/hwk9764)|[Github]()|[Github]()|
 
 ### 맡은 역할
