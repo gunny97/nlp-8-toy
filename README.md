@@ -12,11 +12,11 @@
 1. 주제 및 목표
 - 부스트캠프 AI Tech NLP 트랙 level 1 기초 대회
 - 주제 : 문장 간 유사도 측정 (Semantic Text Similarity, STS)    
-      : STS 데이터셋을 활용해 두 문장의 유사도를 0 ~ 5 사이의 점수로 예측한다.  <br>
+      : STS 데이터셋을 활용해 두 문장의 유사도를 0 ~ 5 사이의 점수로 예측한다.  <br><br>
 2. 평가지표
-- 피어슨 상관 계수(Pearson Correlation Coefficient ,PCC) <br>
-3. 개발 환경
-GPU : Tesla V100 * 4 <br>
+- 피어슨 상관 계수(Pearson Correlation Coefficient ,PCC) <br><br>
+3. 개발 환경 <br>
+GPU : Tesla V100 * 4 <br><br>
 4. 협업 환경
 - 노션 - 팀 노션 페이지에 해야할 일, 상황 공유    
 - 슬랙 - 허들, DM을 활용해 팀원 간 실시간 소통   
