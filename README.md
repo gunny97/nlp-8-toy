@@ -83,7 +83,7 @@ label 별 분포
 <br>
 0.5단위 구간 별 분포
 <br>
-<img src="링크 넣어주세요" width="500" height="400" />
+<img src="링크 넣어주세요" width="550" height="440" />
 <br>
 **V2_augmentation_biased**
 <br>
@@ -93,7 +93,7 @@ label 별 분포
 <br>
 0.5단위 구간 별 분포
 <br>
-<img src="링크 넣어주세요" width="500" height="400" />
+<img src="링크 넣어주세요" width="550" height="440" />
 <br>
 **V3_augmentation_uniform**
 <br>
