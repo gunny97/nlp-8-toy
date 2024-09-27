@@ -77,13 +77,13 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 
 ### 증강 데이터 분포
 **V1_Downsampling**
-|<img src="https://github.com/user-attachments/assets/543fb669-dc70-4f78-9cd6-8bbcd5307ca7" width="400" height="400" />|<img src="https://github.com/user-attachments/assets/dec4e8d2-8570-4f31-a301-dfeb82b2f209" width="550" height="400" />|
+|<img src="https://github.com/user-attachments/assets/543fb669-dc70-4f78-9cd6-8bbcd5307ca7" width="500" height="400" />|<img src="https://github.com/user-attachments/assets/dec4e8d2-8570-4f31-a301-dfeb82b2f209" width="500" height="400" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
 <br>
 
 **V2_augmentation_biased**
-|<img src="https://github.com/user-attachments/assets/aaf45453-c43b-4c24-9a5d-2cb537d0a101" width="400" height="400" />|<img src="https://github.com/user-attachments/assets/f08d04e6-cb61-4cce-a4c9-ae8ba525a215" width="550" height="400" />|
+|<img src="https://github.com/user-attachments/assets/aaf45453-c43b-4c24-9a5d-2cb537d0a101" width="500" height="400" />|<img src="https://github.com/user-attachments/assets/f08d04e6-cb61-4cce-a4c9-ae8ba525a215" width="500" height="400" />|
 |:--:|:--:|
 |label 별 분포|0.5단위 구간 별 분포|
 <br>
