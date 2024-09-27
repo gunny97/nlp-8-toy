@@ -11,14 +11,14 @@ def add_options():
     parser.add_argument("--test_data", default="resources/gen/gen_valid.csv", type=str)
 
     # Model
-    parser.add_argument("--pretrained_model", default="google/gemma-2b-it", type=str, choices=['beomi/gemma-ko-2b', 'google/gemma-2b-it'])
+    parser.add_argument("--pretrained_model", default='google/gemma-2b-it', type=str, choices=['beomi/gemma-ko-2b', 'google/gemma-2b-it'])
 
     # Training
     parser.add_argument("--num_workers", default=os.cpu_count(), type=int)
     parser.add_argument("--lr", default=1e-3, type=float)
     parser.add_argument("--max_length", default=1024, type=int)
     parser.add_argument("--batch_size", default=2, type=int)
-    parser.add_argument("--epochs", default=50, type=int)
+    parser.add_argument("--epochs", default=25, type=int)
     # parser.add_argument("--min_delta", default=0.05, type=int)
     # parser.add_argument("--patience", default=6, type=int)
     parser.add_argument("--model_checkpoint_dir", default="resources/log/gen", type=str)

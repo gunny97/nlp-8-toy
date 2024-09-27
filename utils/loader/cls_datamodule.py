@@ -15,7 +15,9 @@ def from_processed(dir: str, target_name: str):
     df[target_name] = df[target_name].astype("category")
     df[target_name] = df[target_name].cat.codes
     dataset = Dataset.from_dict(
-        {"text": df["utterances_text"].tolist(), "labels": df["topic"].tolist()}
+        {"text": df["utterances_text"].tolist(), 
+         "labels": df[target_name].tolist()
+         }
     )
     # print("데이터 확인 : ", dataset[0])
     return dataset
@@ -95,7 +97,7 @@ class ClsDataModule(pl.LightningDataModule):
             dataset=self._shared_transform("validation"),
             batch_size=self.batch_size,
             num_workers=self.num_workers,
-            drop_last=True,
+            # drop_last=True,
         )
 
     def test_dataloader(self):
@@ -103,5 +105,5 @@ class ClsDataModule(pl.LightningDataModule):
             dataset=self._shared_transform("test"),
             batch_size=self.batch_size,
             num_workers=self.num_workers,
-            drop_last=True,
+            # drop_last=True,
         )

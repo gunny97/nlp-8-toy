@@ -39,6 +39,7 @@ class TransformerModuleForGen(LightningModule):
             pretrained_model_name_or_path=pretrained_model,
             quantization_config=bnb_config,
         )
+        
 
         # modules  = find_linear_names(model, 'qlora')
 
@@ -63,6 +64,8 @@ class TransformerModuleForGen(LightningModule):
         # Apply LoRA
         self.model = get_peft_model(model, peft_config)
         self.model.print_trainable_parameters()
+        # checkpoint = torch.load("resources/log/gen/epoch=4-Val_Loss=2.39.ckpt", map_location="cuda")
+        # self.model.load_state_dict(checkpoint['state_dict'], strict=False)
 
         # Get Evlaudation Metric
         self.tokenizer = AutoTokenizer.from_pretrained(pretrained_model)
@@ -105,8 +108,9 @@ class TransformerModuleForGen(LightningModule):
         outputs = self(
             input_ids=batch["input_ids"], attention_mask=batch["attention_mask"]
         )
-        # print('input: ', batch['input'][0])
+
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
         inputs_ = self.tokenizer(
             batch["input"],
             max_length=self.max_length,
@@ -114,6 +118,8 @@ class TransformerModuleForGen(LightningModule):
             truncation=True,
             return_tensors="pt",
         ).to(device)
+        
+        
         preds = self.model.generate(**inputs_, max_new_tokens=128, use_cache=True)
         preds = [
             self.tokenizer.decode(pred)
@@ -122,9 +128,7 @@ class TransformerModuleForGen(LightningModule):
             .strip()
             for pred in preds
         ]
-        # print('pred: ', preds[0])
-        # exit()
-
+        
         # wandb logging
         self.log("Val_Loss", outputs["loss"], logger=True)
         self._compute_metrics(preds, batch["label"], "Val")
@@ -164,6 +168,61 @@ class TransformerModuleForGen(LightningModule):
 
         return outputs["loss"]
 
+    def test_step(self, batch, batch_idx):
+        """
+        Validation step for calculating and logging validation loss.
+        """
+        outputs = self(
+            input_ids=batch["input_ids"], attention_mask=batch["attention_mask"]
+        )
+
+        # print('input: ', batch['input'][0])
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        inputs_ = self.tokenizer(
+            batch["input"],
+            max_length=self.max_length,
+            padding="max_length",
+            truncation=True,
+            return_tensors="pt",
+        ).to(device)
+        preds = self.model.generate(**inputs_, max_new_tokens=64, use_cache=True)
+        preds = [
+            self.tokenizer.decode(pred)
+            .split("<start_of_turn>model")[-1]
+            .split("<end_of_turn>")[0]
+            .strip()
+            for pred in preds
+        ]
+        # print('pred: ', preds[0])
+
+        # wandb logging
+        self.log("Test_Loss", outputs["loss"], logger=True)
+        self._compute_metrics(preds, batch["label"], "Test")
+
+        return outputs["loss"]
+    
+    def predict_step(self, batch, batch_idx):
+        outputs = self(
+            input_ids=batch["input_ids"], attention_mask=batch["attention_mask"]
+        )
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        inputs_ = self.tokenizer(
+            batch["input"],
+            max_length=self.max_length,
+            padding="max_length",
+            truncation=True,
+            return_tensors="pt",
+        ).to(device)
+        preds = self.model.generate(**inputs_, max_new_tokens=64, use_cache=True)
+        preds = [
+            self.tokenizer.decode(pred)
+            .split("<start_of_turn>model")[-1]
+            .split("<end_of_turn>")[0]
+            .strip()
+            for pred in preds
+        ]
+        return preds
+    
     def configure_optimizers(self) -> Optimizer:
         """
         Set up the optimizer (AdamW) for training with learning rate scheduling.

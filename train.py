@@ -46,7 +46,7 @@ def training_loop(config) -> TransformerModule:
         ),
         EarlyStopping(
             monitor="Val_F1_Score",
-            min_delta=config.min_delta,
+            # min_delta=config.min_delta,
             patience=config.patience,
             mode="max",
         ),
@@ -59,21 +59,11 @@ def training_loop(config) -> TransformerModule:
         devices=1,  # 특정 gpu에 할당, 새로운 서버에는 0으로 초기화 필요
         accelerator="gpu",
         max_epochs=config.epochs,
-        precision="bf16-mixed" if torch.cuda.is_available() else "32-true",
+        # precision="bf16-mixed" if torch.cuda.is_available() else "32-true",
         logger=wandb_logger,
     )
     trainer.fit(model=model, datamodule=dm)
-
-    # # Evaluate the last and the best models on the test sample.
-    # best_model_path = checkpoint_callback.best_model_path
-    # trainer.test(model=model, datamodule=datamodule)
-    # trainer.test(
-    #     model=model,
-    #     datamodule=datamodule,
-    #     ckpt_path=best_model_path,
-    # )
-
-
+    
 if __name__ == "__main__":
 
     # Free up gpu vRAM from memory leaks.
@@ -83,4 +73,4 @@ if __name__ == "__main__":
     train_config = add_options()
 
     # Train model.
-    trained_model, data_module = training_loop(train_config)
+    training_loop(train_config)

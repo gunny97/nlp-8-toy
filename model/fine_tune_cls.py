@@ -6,6 +6,7 @@ from utils.helpers import find_linear_names
 from pytorch_lightning import LightningModule
 from peft import get_peft_model, LoraConfig, TaskType
 from torch.optim import AdamW, Optimizer
+from transformers import get_linear_schedule_with_warmup
 from torchmetrics.functional.classification import (
     multiclass_accuracy,
     multiclass_f1_score,
@@ -27,30 +28,37 @@ class TransformerModule(LightningModule):
         lr: float,
     ):
         super().__init__()
-        # 양자화를 사용해서 학습 시 loss가 Nan이 나오는 경우가 있어요.
-        # 그 이유는 저도 자세히는 잘 모르겠지만 성능 측면에서는 양자화를 사용하지 않는게 좋으니 빼서 사용했어요!
-        bnb_config = BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_use_double_quant=True,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_compute_dtype=torch.bfloat16
-        )
+        # # 양자화를 사용해서 학습 시 loss가 Nan이 나오는 경우가 있어요.
+        # # 그 이유는 저도 자세히는 잘 모르겠지만 성능 측면에서는 양자화를 사용하지 않는게 좋으니 빼서 사용했어요!
+        # bnb_config = BitsAndBytesConfig(
+        #     load_in_4bit=True,
+        #     bnb_4bit_use_double_quant=True,
+        #     bnb_4bit_quant_type="nf4",
+        #     bnb_4bit_compute_dtype=torch.bfloat16
+        # )
         self.num_classes = num_classes
         self.lr = lr
         model = AutoModelForSequenceClassification.from_pretrained(
             pretrained_model_name_or_path=pretrained_model,
             num_labels=self.num_classes,
-            quantization_config=bnb_config,
+            # quantization_config=bnb_config,
         )
-        modules  = find_linear_names(model)
 
         peft_config = LoraConfig(
             task_type=TaskType.SEQ_CLS,
-            target_modules=modules,
+            target_modules=[
+                "q_proj",
+                "k_proj",
+                "v_proj",
+                "o_proj",
+                "gate_proj",
+                "up_proj",
+                "down_proj",
+            ],
             lora_dropout=0.05,  # Dropout rate for the adapter
             bias="none",  # Bias configuration for the adapter
-            r=64,  # 8
-            lora_alpha=32,
+            r=32,  # 8
+            lora_alpha=8,
         )
         self.model = get_peft_model(model, peft_config)
         self.model.print_trainable_parameters()
@@ -151,10 +159,19 @@ class TransformerModule(LightningModule):
             self.log(f"{k}", v)
         return outputs["loss"]
 
-    def configure_optimizers(self) -> Optimizer:
+    # def configure_optimizers(self) -> Optimizer:
+    #     optimizer = AdamW(
+    #         self.parameters(), lr=self.lr, weight_decay=0.0, betas=(0.9, 0.98)
+    #     )
+    #     scheduler = WarmupDecayLR(optimizer, warmup_steps=10000, d_model=512)
+    #     return [optimizer], [scheduler]
+    
+    def configure_optimizers(self):
+        # optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr, weight_decay=self.weight_decay, betas=(self.beta1, self.beta2))
         optimizer = AdamW(
             self.parameters(), lr=self.lr, weight_decay=0.0, betas=(0.9, 0.98)
         )
-        scheduler = WarmupDecayLR(optimizer, warmup_steps=10000, d_model=512)
-
-        return [optimizer], [scheduler]
+        num_steps = int(9974  * 10 / 16)
+        scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=300, num_training_steps=num_steps)
+        lr_scheduler = {'scheduler': scheduler, 'monitor': 'loss', 'interval': 'step', 'frequency': 1}
+        return [optimizer], [lr_scheduler]

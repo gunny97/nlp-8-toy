@@ -14,7 +14,7 @@ import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
-def training_loop(config):
+def predict_loop(config):
     """
     Training loop that sets up data module, logger, and trainer for training the model.
     """
@@ -33,13 +33,6 @@ def training_loop(config):
         num_workers=config.num_workers,
     )
 
-    wandb_logger = WandbLogger(
-        name=f"{config.pretrained_model}_{config.exp_name}",
-        project="nlp_gen",
-        save_dir=config.model_checkpoint_dir,
-        log_model=True,
-    )
-    wandb_logger.log_hyperparams(config)
 
     # Checkpointing and early stopping based on validation loss
     callbacks = [
@@ -51,19 +44,21 @@ def training_loop(config):
             save_top_k=1,
         )
     ]
-
+ # 
+ # 'epoch=12-Val_Loss=1.53.ckpt'
     trainer = Trainer(
         callbacks=callbacks,
         devices=1,
         accelerator="gpu",
         max_epochs=config.epochs,
         accumulate_grad_batches=4,
-        logger=wandb_logger,
         
     )
 
-    # Training
-    trainer.fit(model=model, datamodule=dm)
+    predictions = trainer.predict(model=model, datamodule=dm, ckpt_path = 'resources/log/gen/epoch=3-Val_Loss=1.56.ckpt')
+    print(predictions)
+    exit()
+
 
 
 if __name__ == "__main__":
@@ -74,4 +69,4 @@ if __name__ == "__main__":
     train_config = add_options()
 
     # Train the model
-    training_loop(train_config)
+    predict_loop(train_config)
