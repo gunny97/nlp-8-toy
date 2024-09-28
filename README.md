@@ -35,7 +35,7 @@
 ### 맡은 역할
 |**member**|**role**|
 |:--|--|
-|**김동한**|**EDA**(데이터 셋 특성 분석), **데이터 증강**(back translation), **모델링 및 튜닝**(Bert, Roberta, Albert, SBERT, WandB)|
+|**김동한**|**Modeling(Soft Voting Ensemble)**, **Model Tuning(snumin44/simcse-ko-roberta-supervised, sorryhyun/sentence-embedding-klue-large)**|
 |**김성훈**|**Model Exploration & Training**, **Modeling(Second-stream with GNN**, **Contrastive Learning, Soft Voting Ensemble)**, **Model Tuning(deliciouscat/kf-deberta-base-cross-sts, snunlp/KR-ELECTRA-discriminator)**|
 |**김수아**|**EDA**(label 분포 및 문장 길이 분석)|
 |**김현욱**|**EDA**(label 분포 분석), **데이터 증강**(Sentence Swap/Adverb Augmentation/BERT-Mask Insertion)|
