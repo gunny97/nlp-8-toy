@@ -1,3 +1,4 @@
+import pickle
 import torch.nn as nn
 import bitsandbytes as bnb
 
@@ -26,3 +27,9 @@ def find_linear_names(model, train_mode = 'lora'):
         if "lm_head" in lora_module_names:
             lora_module_names.remove("lm_head")
     return list(lora_module_names)
+
+
+def load_pickle(dir):
+    with open(dir, "rb") as f:
+        embeds = pickle.load(f)
+    return embeds

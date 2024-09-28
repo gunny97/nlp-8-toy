@@ -7,6 +7,7 @@
 3. [사용한 데이터셋](#3-사용한-데이터셋)
 4. [모델](#4-모델)
 5. [프로젝트 구조](#5-프로젝트-구조)
+6. [Installation and Quick Start](#6-installation-and-quick-start)
 
 ## 1. 프로젝트 소개
 (1) 주제 및 목표
@@ -104,18 +105,18 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 ## 4. 모델
 |**Model**|**Learing Rate**|**Batch Size**|**loss**|**epoch**|**beta**|**Data Augmentation**|**Public Pearson**|**Ensemble Weight**|
 |:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-|**klue/RoBERTa-large**|1e-5|16|L1|5|Spell Check|AugmentationV2|0.9125|0.9125|
-|**klue/RoBERTa-large**|1e-5|16|MSE|2|Spell Check|AugmentationV3|0.9166|0.9166|
-|**kykim/electra-kor-base**|2e-5|32|L1|23|Spell Check|AugmentationV2|0.9216|0.9216|
-|**snunlp/KR-ELECTRA-discriminator**|1e-5|32|L1|15||AugmentationV1|0.9179|0.9179|
-|**snunlp/KR-ELECTRA-discriminator**|2e-5|32|L1|15|Spell Check|AugmentationV2|0.9217|0.9217|
+|**candidate_v1_deberta_CL**|1e-5|16|L1|5|Spell Check|AugmentationV2|0.9125|0.9125|
+|**candidate_v1_clean_deberta**|1e-5|16|MSE|2|Spell Check|AugmentationV3|0.9166|0.9166|
+|**candidate_v2_roberta_after**|2e-5|32|L1|23|Spell Check|AugmentationV2|0.9216|0.9216|
+|**candidate_v2_electra**|1e-5|32|L1|15||AugmentationV1|0.9179|0.9179|
+|**candidate_v3_electra**|2e-5|32|L1|15|Spell Check|AugmentationV2|0.9217|0.9217|
 
 
 ## 5. 프로젝트 구조
 ```sh
 .
 ├── model
-│     ├── fine_tune_sts.py      # STS Model
+│     ├── fine_tune_sts.py
 │     └── SimCSE.py
 ├── preprocessing
 │         ├── BERT_augmentation.py
@@ -126,12 +127,47 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 │         └── v3_augmentation_uniform.ipynb
 ├── resources
 │       ├── log
-│       └── sample      # dataset
+│       └── sample 
 ├── utils
-│     ├── data_modeul.py      # STS DataModule
+│     ├── data_modeul.py
 │     └── helpers.py
 └── environment.yml
 ├── train.py
 ├── train_unsup_CL.py
 └── inference.py
+```
+
+## 6. Installation and Quick Start
+
+**Step 1.** 해당 repository를 clone해서 사용해주세요.
+**Step 2.** 프로젝트에 필요한 모든 dependencies는 `requirements.txt`에 있고, 이에 대한 가상환경을 생성해서 프로젝트를 실행합니다.
+```sh
+$ python -m venv .venv
+$ pip install --upgrade pip
+$ pip install -r requirements.txt
+```
+
+**Step 3.** 본인의 가상환경에 원하는 Task 수행하시면 됩니다.
+```sh
+$ . .venv/bin/activate
+$ wandb login # init set up : 본인의 wandb 계정을 한번 로그인 해두면 그 다음부터는 실행 안해도 됩니다.
+$ python train.py
+```
+
+**Optional.** 원격 연결 끊어졌을 때도 돌아갈 수 있도록 Tmux 사용을 권장합니다. 더 자세한 명령어는 구글링 해주세요!
+```sh
+# 새로운 세션 생성
+$ tmux new -s (session_name)
+
+# 세션 목록
+$ tmux ls
+
+# 세션 시작하기 (다시 불러오기)
+tmux attach -t (session_name)
+
+# 세션에서 나가기
+(ctrl + b) d
+
+# 특정 세션 강제 종료
+$ tmux kill-session -t (session_name)
 ```

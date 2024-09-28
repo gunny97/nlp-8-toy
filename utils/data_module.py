@@ -60,7 +60,7 @@ class STSDataModule(pl.LightningDataModule):
             padding='max_length', 
             truncation=True
         )
-        tokens["label"] = [label for label in batch["labels"]]
+        tokens["label"] = [[label] for label in batch["labels"]]
         return tokens
 
     def _shared_transform(self, split: str) -> torch.tensor:
@@ -73,7 +73,6 @@ class STSDataModule(pl.LightningDataModule):
             batched=True,
             load_from_cache_file=True,
         )
-        # print("데이터 확인 2: ", tokenized_ds[0])
         tokenized_ds.set_format(type="torch", columns=["input_ids", "attention_mask", "label"])
         return tokenized_ds
 
@@ -109,8 +108,13 @@ class STSDataModule(pl.LightningDataModule):
 
 
 def from_processed_SimCSE(dir, predict=False):
-    df = pd.read_csv(dir)            
-    dataset = Dataset.from_dict({"text": df['sentence'].tolist()})
+    df = pd.read_csv(dir)
+    sentence_lst = []
+    for _, row in df.iterrows():
+        sentence_lst.append(row['sentence_1'])
+        sentence_lst.append(row['sentence_2'])
+    dataset = Dataset.from_dict({"text": sentence_lst})
+    
     return dataset
 
 

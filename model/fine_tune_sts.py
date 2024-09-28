@@ -31,7 +31,7 @@ class TransformerModule(LightningModule):
             backbone_state_dict = {k[len("backbone."):]: v for k, v in state_dict.items() if k.startswith("backbone.")}
 
             self.plm = AutoModelForSequenceClassification.from_pretrained(pretrained_model_name_or_path=model_name, 
-                                                                          state_dict=backbone_state_dict, num_labels=1)
+                                                                            state_dict=backbone_state_dict, num_labels=1)
         else:
             self.plm = AutoModelForSequenceClassification.from_pretrained(pretrained_model_name_or_path=model_name,num_labels=1)
             
@@ -47,7 +47,6 @@ class TransformerModule(LightningModule):
     def training_step(self, batch, batch_idx):
         input_ids, attention_mask, y = batch["input_ids"], batch["attention_mask"], batch["label"]
         logits = self(input_ids, attention_mask)
-
         loss = self.loss_func(logits, y.float())
         self.log("train_loss", loss)
 

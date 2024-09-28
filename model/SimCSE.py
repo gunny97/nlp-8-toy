@@ -70,6 +70,7 @@ class Model(LightningModule):
         # this trick is a bit complicated, so you may omit it when training your own model
         # different dropout masks are adapt automatically
         outputs1 = self(input_ids, attention_mask)
+        
         # take representations of [CLS] token
         # we only implement the best performing pooling, [CLS], for simplicity
         # you can easily extend to other poolings (such as mean pooling or max pooling) by edting this line

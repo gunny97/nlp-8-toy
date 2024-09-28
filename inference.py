@@ -46,12 +46,15 @@ def inference_loop(config) -> TransformerModule:
         
     predictions = trainer.predict(model=model, datamodule=dm, ckpt_path = args.ckpt_path)
     # 예측된 결과를 형식에 맞게 반올림하여 준비합니다.
-    predictions = list(round(float(i), 1) for i in torch.cat(predictions))
+    if args.output_format == 'round':
+        predictions = list(round(float(i), 1) for i in torch.cat(predictions))
+    else:
+        predictions = list(float(i) for i in torch.cat(predictions))
     
     # output 형식을 불러와서 예측된 결과로 바꿔주고, output.csv로 출력합니다.
-    output = pd.read_csv('./resources/sts/sample_submission.csv')
+    output = pd.read_csv(args.output_data)
     output['target'] = predictions
-    output.to_csv('submission_0923_3.csv', index=False)
+    output.to_csv(args.output_name, index=False)
     
 
 if __name__ == "__main__":
@@ -62,19 +65,22 @@ if __name__ == "__main__":
     # 하이퍼 파라미터 등 각종 설정값을 입력받습니다
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', default='deliciouscat/kf-deberta-base-cross-sts', type=str, choices=['deliciouscat/kf-deberta-base-cross-sts'])
-    parser.add_argument('--predict_path', default='./resources/sts/test.csv')
-    parser.add_argument('--CL', default="code/code/augmentation_noswap_all_swap_CL/1500_0.9_0.999_0.01_epoch=9-val_loss=0.020.ckpt", help='Load Unsupervised Contrastive Learning Model')
-    parser.add_argument('--ckpt_path', default='./code/code/augmentation_noswap_all_swap/1000_0.9_0.999_0.01_epoch=12-val_pearson=0.929.ckpt')
+    parser.add_argument('--predict_path', default='./resources/raw/test.csv')
+    parser.add_argument('--CL', default=None, help='Load Unsupervised Contrastive Learning Model', help='Inferece 시에는 영향 X')
+    parser.add_argument('--ckpt_path', default='./resources/log/raw/ckpt/350_0.9_0.999_0.01_epoch=1-val_pearson=0.922.ckpt')
+    parser.add_argument('--output_data', default='./resources/raw/sample_submission.csv')
+    parser.add_argument('--output_name', default='submission.csv')
+    parser.add_argument('--output_format', default='round', choices=['round', 'None'])
     parser.add_argument('--batch_size', default=32, type=int)
-    parser.add_argument('--max_epoch', default=20, type=int) 
-    parser.add_argument('--dataset_size', default=10000, type=int) 
+    parser.add_argument('--max_epoch', default=20, type=int, help='Inferece 시에는 영향 X')
+    parser.add_argument('--dataset_size', default=10000, type=int, help='Inferece 시에는 영향 X')
     parser.add_argument('--max_length', default=128, type=int)
-    parser.add_argument('--lr', default=1e-5, type=float)
-    parser.add_argument("--warmup", type=int, default=1000, help="Number of warmup steps", choices=[500, 600, 1000, 2000])
-    parser.add_argument('--beta1', default=0.9, type=float)
-    parser.add_argument('--beta2', default=0.999, type=float)
+    parser.add_argument('--lr', default=1e-5, type=float, help='Inferece 시에는 영향 X')
+    parser.add_argument("--warmup", type=int, default=1000, help="Number of warmup steps", help='Inferece 시에는 영향 X')
+    parser.add_argument('--beta1', default=0.9, type=float, help='Inferece 시에는 영향 X')
+    parser.add_argument('--beta2', default=0.999, type=float, help='Inferece 시에는 영향 X')
     parser.add_argument("--num_workers", default=os.cpu_count()//2, type=int)
-    parser.add_argument('--weight_decay', default=0.01, type=float)
+    parser.add_argument('--weight_decay', default=0.01, type=float, help='Inferece 시에는 영향 X')
 
     args = parser.parse_args()
     

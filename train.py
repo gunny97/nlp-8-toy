@@ -16,7 +16,7 @@ torch.cuda.manual_seed_all(104)
 random.seed(104)
 
 
-def training_loop(config) -> TransformerModule:
+def training_loop(config):
     model = TransformerModule(
         model_name=config.model_name,
         lr=config.lr,
@@ -68,7 +68,8 @@ def training_loop(config) -> TransformerModule:
         
 
     trainer.fit(model=model, datamodule=dm)
-
+    trainer.test(model=model, datamodule=dm)
+    
 if __name__ == "__main__":
     # Free up gpu vRAM from memory leaks.
     torch.cuda.empty_cache()
@@ -77,18 +78,18 @@ if __name__ == "__main__":
     # 하이퍼 파라미터 등 각종 설정값을 입력받습니다
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', default='deliciouscat/kf-deberta-base-cross-sts', type=str, choices=['deliciouscat/kf-deberta-base-cross-sts'])
-    parser.add_argument('--train_path', default='./resources/sts/dev.csv')
-    parser.add_argument('--dev_path', default='./resources/sts/dev.csv')
-    parser.add_argument('--test_path', default='./resources/sts/dev.csv')
-    parser.add_argument('--predict_path', default='./resources/sts/test.csv')
+    parser.add_argument('--train_path', default='./resources/raw/train.csv')
+    parser.add_argument('--dev_path', default='./resources/raw/dev.csv')
+    parser.add_argument('--test_path', default='./resources/raw/dev.csv')
+    parser.add_argument('--predict_path', default='./resources/raw/test.csv')
     parser.add_argument('--CL', default=None, help='Load Unsupervised Contrastive Learning Model')
-    parser.add_argument('--save_dir', default='./resources/log/v1_CL/')
-    parser.add_argument('--batch_size', default=32, type=int)
-    parser.add_argument('--max_epoch', default=1, type=int)
+    parser.add_argument('--save_dir', default='./resources/log/raw/')
+    parser.add_argument('--batch_size', default=16, type=int)
+    parser.add_argument('--max_epoch', default=20, type=int)
     parser.add_argument('--dataset_size', default=9324, type=int, choices=[9324])
     parser.add_argument('--max_length', default=128, type=int)
     parser.add_argument('--lr', default=1e-5, type=float)
-    parser.add_argument("--warmup", type=int, default=800, help="Number of warmup steps", choices=[500, 600, 1000, 2000])
+    parser.add_argument("--warmup", type=int, default=350, help="Number of warmup steps")
     parser.add_argument('--beta1', default=0.9, type=float)
     parser.add_argument('--beta2', default=0.999, type=float)
     parser.add_argument('--weight_decay', default=0.01, type=float)
