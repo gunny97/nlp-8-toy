@@ -38,7 +38,7 @@
 |**김성훈**|**EDA**(label-pred 분포 분석), **데이터 증강**(back translation/nnp_sl_masking/어순도치/단순복제), **모델 튜닝**(roberta-large, kr-electra-discriminator)|
 |**김수아**|**EDA**(label 분포 및 문장 길이 분석)|
 |**김현욱**|**EDA**(label 분포 분석), **데이터 증강**(Sentence Swap/Adverb Augmentation/BERT-Mask Insertion)|
-|**송수빈**|**데이터 전처리**(Downsampling), **데이터 증강**(Sentence Swap/BERT-Mask Insertion/hanspell)|
+|**송수빈**|**데이터 증강**(Downsampling/Sentence Swap/BERT-Mask Insertion/hanspell)|
 |**신수환**|**모델링 및 튜닝**(RoBERTa, T5, SBERT), **모델 경량화**(Roberta-large with deepspeed)|
 <br>
 
