@@ -129,7 +129,7 @@ train data의 불균형을 해소하기 위해 label 0.0에 해당하는 데이�
 │       ├── log
 │       └── sample 
 ├── utils
-│     ├── data_modeul.py
+│     ├── data_module.py
 │     └── helpers.py
 └── environment.yml
 ├── train.py
