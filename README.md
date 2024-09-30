@@ -276,15 +276,13 @@ Hugging Face의 모델 허브에서 `semantic text similarity` tag로 필터링�
 - Min-Max 정규화 가중 평균
     - 단순 Valid score 기반 가중 평균시, 대부분의 앙상블 대상 모델이 92~93의 유사한 valid score를 가짐
     - 더 좋은 성능을 가진 모델과 그렇지 않은 모델간 차이를 줄 수 있게 적합한 가중치 정규화의 필요성을 느낌
-
-    - Min-Max 정규화는 피쳐 값의 범위를 0~1로 조정하는 기법으로 Min-Max 정규화의 공식 기반으로 값의 범위를 0.8~1.2로 조정해서 사용 
-
     - 앙상블할 모델의 valid score를 0.8~1.2 값으로 scaling하여 가중평균
     - 0.8~1.2로 scaling할때의 min-max 정규화 수식
-        
-        $$
-        0.8+\frac {x-x_{min}} {x_{max}-x_{min}}\times(1.2-0.8)
-        $$
+
+$$
+0.8+\frac {x-x_{min}} {x_{max}-x_{min}}\times(1.2-0.8)
+$$
+
 
 **결과 분석**
 - Data Aaugmentation 진행한 결과에 따른 4가지 version의 train data와 Model exploration&Modeling을 거쳐 선정된 model에 다양한 조합으로 실험하여 최적의 성능 도출
