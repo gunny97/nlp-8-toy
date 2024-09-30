@@ -258,7 +258,7 @@ Hugging Face의 모델 허브에서 `semantic text similarity` tag로 필터링�
 - `train.csv`의 `sentence_1`, `sentence_2` 를 사전 학습된 encoder 모델로 임베딩 후, 각 임베딩 벡터 간의 코사인 유사도를 계산하고 label과 코사인 유사도 간 상관관계를 기준으로 두개의 클러스터로 분류
 
 **결과 분석**
-- 정랭적 평가 : Public Pearson 측정 결과, 0.9177의 성능을 확인
+- 정량적 평가 : Public Pearson 측정 결과, 0.9177의 성능을 확인
 - 정성적 평가 : 맞춤법, 불용어 등에 따라 코사인 유사도의 영향을 많이 받는 것을 확인하여 Cleaning 전처리를 추가하기로 결정
 
 ### Soft Voting Ensemble
@@ -276,7 +276,9 @@ Hugging Face의 모델 허브에서 `semantic text similarity` tag로 필터링�
 - Min-Max 정규화 가중 평균
     - 단순 Valid score 기반 가중 평균시, 대부분의 앙상블 대상 모델이 92~93의 유사한 valid score를 가짐
     - 더 좋은 성능을 가진 모델과 그렇지 않은 모델간 차이를 줄 수 있게 적합한 가중치 정규화의 필요성을 느낌
-    - Min-Max 정규화는 피쳐 값의 범위를 0~1로 조정하는 기법으로 본 프로젝트에서는 Min-Max 정규화의 공식 기반으로 값의 범위를 0.8~1.2로 조정해서 사용
+
+    - Min-Max 정규화는 피쳐 값의 범위를 0~1로 조정하는 기법으로 Min-Max 정규화의 공식 기반으로 값의 범위를 0.8~1.2로 조정해서 사용 
+
     - 앙상블할 모델의 valid score를 0.8~1.2 값으로 scaling하여 가중평균
     - 0.8~1.2로 scaling할때의 min-max 정규화 수식
         
